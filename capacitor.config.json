@@ -1,0 +1,12 @@
+{
+    "appId": "io.ionic.gadsetfront",
+    "appName": "gadsetfront",
+    "bundledWebRuntime": false,
+    "npmClient": "npm",
+    "webDir": "build",
+    "server" : {
+      "url" : "http://172.31.8.120:8000/",
+      "cleartext" : true
+    },
+    "cordova": {}
+  }

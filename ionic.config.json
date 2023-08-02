@@ -1,0 +1,7 @@
+{
+    "name": "gadsetfront",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }
