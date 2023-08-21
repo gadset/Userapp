@@ -12,6 +12,18 @@ export const modelSlice = createSlice({
   },
 })
 
+export const deviceSlice = createSlice({
+  name: 'device',
+  initialState: {
+    value: '',
+  },
+  reducers: {
+    setdeviceValue: (state, action) => {
+      state.value = action.payload
+    },
+  },
+})
+
 export const IssueSlice = createSlice({
   name: 'issues',
   initialState: {
@@ -89,7 +101,7 @@ export const ImageSlice = createSlice({
 export const UserIdSlice = createSlice({
   name: 'userid',
   initialState: {
-    value: {},
+    value: '',
   },
   reducers: {
     setUserIdValue: (state, action) => {
@@ -97,6 +109,19 @@ export const UserIdSlice = createSlice({
     },
   },
 })
+
+export const quoteidSlice = createSlice({
+  name: 'quoteid',
+  initialState: {
+    value: '',
+  },
+  reducers: {
+    setquoteidValue: (state, action) => {
+      state.value = action.payload
+    },
+  },
+})
+
 export const partnerSlice = createSlice({
   name: 'partner',
   initialState: {
@@ -118,6 +143,8 @@ export const {setImageValue} = ImageSlice.actions
 export const {setUserIdValue} = UserIdSlice.actions
 export const {setquoteValue} = quotesSlice.actions
 export const {setpartnerValue} = partnerSlice.actions
+export const {setdeviceValue} = deviceSlice.actions
+export const {setquoteidValue} = quoteidSlice.actions
 
 const modelReducer = modelSlice.reducer
 const issueReducer = IssueSlice.reducer
@@ -128,5 +155,7 @@ const ImageReducer = ImageSlice.reducer
 const UserReducer = UserIdSlice.reducer
 const quotesReducer = quotesSlice.reducer
 const partnerreducer = partnerSlice.reducer
+const deviceReducer = deviceSlice.reducer
+const quoteidreducer = quoteidSlice.reducer
 export {modelReducer, issueReducer, addressReducer, DateReducer, MobileReducer, ImageReducer, UserReducer,
-quotesReducer, partnerreducer};
+quotesReducer, partnerreducer, deviceReducer, quoteidreducer};

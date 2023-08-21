@@ -16,6 +16,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Phonenumber1 from "./Phonenumber1";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@emotion/react";
+import { FirebaseApp } from "firebase/app";
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -30,7 +31,7 @@ function setUpRecaptha(number) {
  // var appVerifier = new RecaptchaVerifier('recaptcha-container');
     const recaptchaVerifier = new RecaptchaVerifier(
       "recaptcha-container",
-      {},
+      {'size': 'invisible'},
       auth
     );
     recaptchaVerifier.render();
@@ -59,12 +60,14 @@ const Phonesignin = ({total}) => {
   const [flag, setFlag] = useState(false);
   const [otp, setOtp] = useState("");
   const [result, setResult] = useState("");
+  const [name, setName] = useState("");
   const theme = useTheme();
 //const total = location.state.total;
   //const { setUpRecaptha } = useUserAuth();
   const history = useHistory();
 
   const [width, setWidth] = useState(window.innerWidth);
+
 
   function handleWindowSizeChange() {
       setWidth(window.innerWidth);
@@ -86,17 +89,13 @@ const Phonesignin = ({total}) => {
     console.log(newnum);
     setError("");
     if (number === "" || number === undefined)
-      return setError("Please enter a valid phone number!");
-    try {
+    {  return setError("Please enter a valid phone number!");}
+
       dispatch(setMobileValue(newnum));
       const response = await setUpRecaptha(newnum);
       setResult(response);
       console.log(response);
-      setFlag(true);
-    } catch (err) {
-      setError(err.message);
-    }
-
+       setFlag(true);
     console.log(error);
   };
 
@@ -106,6 +105,7 @@ const Phonesignin = ({total}) => {
     setError("");
     if (otp === "" || otp === null) return;
     try {
+
       await result.confirm(otp);
       const auth= getAuth();
       const user = auth.currentUser;
@@ -113,20 +113,46 @@ const Phonesignin = ({total}) => {
       if(user){
         uid = user.uid;
       }
-      const docRef = doc(firestoredb, "Users", number);
-      const data = {
-                 "number" : number
-                 }
-     setDoc(docRef, data)
-     .then(() => {
-         console.log("Document has been added successfully");
-     })
-     .catch(error => {
-         console.log(error);
-     })
-      dispatch(setUserIdValue(docRef.id));
+
+// POST request using fetch()
+fetch(process.env.REACT_APP_BACKEND + "users", {
+	
+// Adding method type
+method: "POST",
+
+// Adding body or contents to send
+body: JSON.stringify({
+phone : number,
+name : name
+}),
+
+// Adding headers to the request
+headers: {
+  "Content-type": "application/json; charset=UTF-8"
+}
+})
+
+// Converting to JSON
+.then(response => response.json())
+
+// Displaying results to console
+.then(json => {dispatch(setUserIdValue(json['id'])) ;
+localStorage['gadsetid'] = json['id']; }  );
+
+    //   const docRef = doc(firestoredb, "Users", number);
+    //   const data = {
+    //              "number" : number
+    //              }
+    //  setDoc(docRef, data)
+    //  .then(() => {
+    //      console.log("Document has been added successfully");
+    //  })
+    //  .catch(error => {
+    //      console.log(error);
+    //  })
+    //   dispatch(setUserIdValue(docRef.id));
       localStorage['verified'] = "yes";
-      localStorage['phonenumber'] = number;
+     
       history.push({
         pathname : '/issuepage',
       })
@@ -138,6 +164,17 @@ const Phonesignin = ({total}) => {
   return (
     <Grid container  sx={{ marginLeft: 0, marginTop : '10px' }} style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
       <div style={{width: isMobile ? '95%' : '40%', display:'flex', flexDirection:'column',backgroundColor : '#ffffff',textAlign : 'left' }}>
+      <Typography variant="h4">Name<sup>*</sup></Typography>
+            <TextField
+              variant="outlined"
+              required
+              id="name"
+              name="name"
+              value={name}
+              size='small'
+              fullWidth
+              onChange={(e) => setName(e.target.value)}
+        />
         <Typography variant="h5" style={{marginTop:theme.spacing(1)}}>Enter number</Typography>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={getOtp}>

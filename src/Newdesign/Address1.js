@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -13,6 +13,8 @@ import { setAddressValue } from "../reduxstore";
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import { MyLocation } from "@mui/icons-material";
 import { useTheme } from "@emotion/react";
+import Geocode from "react-geocode";
+import { toast } from "react-toastify";
 
 const AddressForm1 = ({onData, handlenextpage}) => {
   const [name, setName] = useState("");
@@ -38,6 +40,44 @@ const [place, setplace] = useState("")
     });
   };
 
+  const [latlng, setlatlng] = useState({});
+  Geocode.setApiKey("AIzaSyBKIByYCgUyIZYIfQUchm4ZVtowK0tvfhg");
+ 
+
+  // useEffect(()=>{
+  //   const getLocation = () => {
+  //     if (!navigator.geolocation) {
+  //       console.log('Geolocation is not supported by your browser');
+  //     } else {
+  //       console.log('Locating...');
+  //       navigator.geolocation.watchPosition((position) => {
+         
+  //         console.log(position.coords)
+  //     //   setLat(position.coords.latitude);
+  //       // setLng(position.coords.longitude);
+  //       setlatlng({
+  //         lat : position.coords.latitude,
+  //         lng : position.coords.longitude,
+  //       })
+  
+  //       Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(
+  //         (response) => {
+  //           const address = response.results[0].formatted_address;
+  //           console.log(address);
+  //         },
+  //         (error) => {
+  //           console.error(error);
+  //         }
+  //       );
+        
+  //       console.log('done')
+  //       }, () => {
+  //         console.log('Unable to retrieve your location');
+  //       });
+  //     }
+  //   }
+  //   getLocation();
+  // }, [])
   const handlenext = () => {
     const data = {
       'name' : name,
@@ -49,9 +89,21 @@ const [place, setplace] = useState("")
       'state' : state,
       'place' : place
     };
+    fetch(process.env.REACT_APP_BACKEND+'users/setaddress', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      }, 
+      body : JSON.stringify({
+        id : localStorage.getItem('gadsetid'),
+        address : data
+      }),   
+    }).then(response => response.json())
+    .then(json => {handlenextpage();});  
     onData(data)
     dispatch(setAddressValue(data));
-    handlenextpage();
+    
   }
   return (
     <Grid container sx={{ marginLeft: 0, width: "100%", display:'flex', flexDirection:'column', alignItems:'center' ,marginBottom: '30px',
@@ -93,9 +145,9 @@ borderRadius: '20px', color:'black', width:'90%'}} variant="contained"> Use my c
             
             <Typography variant="h4"
             >Address<sup>*</sup></Typography>
-            <Button 
+            {/* <Button 
             sx={{borderRadius: '5px',
-background: '#A5A4A4'}} ><MyLocationIcon sx={{color:'10px'}}/> Use my current location</Button>
+background: '#A5A4A4'}} ><MyLocationIcon sx={{color:'10px'}}/> Use my current location</Button> */}
 
             <Grid container sx={{display:'flex', flexDirection : 'row', mt:1, mb:1, justifyContent:'space-between'}}>
             

@@ -80,7 +80,12 @@ const Getquotes = () => {
     const [quality, setquality] = useState("normal");
     const [quotedata, setquotedata] = useState([]);
     const [isTimerRunning, setistimerrunning]= useState(true);
-    const Model = useSelector((state) => state.model.value)
+    const Model = useSelector((state) => state.model.value);
+    const subscription = JSON.parse(localStorage.getItem('subscription'));
+    console.log(subscription);
+   // const quoteid = useSelector((state)=>state.quoteid.value);
+   const quoteid = localStorage.getItem("quoteidrecent");
+    console.log(quoteid);
     const handleChange = (e) => {
         setquality(e.target.value);
         console.log(e.target.value)
@@ -105,32 +110,52 @@ const Getquotes = () => {
     //    //      quotedata[quotedata.length-1]['add'] = 0;
     //    //    }
     //     }); 
-        if(isTimerRunning===true){
-            const newTimerId = setTimeout(async() => {
-                const querySnapshot = await getDocs(collection(firestoredb, "Quotes", uid, 'quotes'));
-                querySnapshot.forEach((doc, index) => {
-                  quotedata.push(doc.data());
-                  console.log(doc.data());
-               //    if(doc.data()['delivery'] === 'Service center'){
-               //      const dist = getDistance(doc.data()['address'], latlng);
-               //      quotedata[quotedata.length-1]['add'] = dist/1000;
-               //    }
-               //    else{
-               //      quotedata[quotedata.length-1]['add'] = 0;
-               //    }
-                }); 
-            setquotedata(quotedata);
-            //setloading(true);
-            setShow(false);
-                clearTimeout(newTimerId);
-                //setCountDown(0);
-                //setTimerId(null);
-                setistimerrunning(false);
-              }, 60000);
-        }
+        // if(isTimerRunning===true){     
+        //     const newTimerId = setTimeout(async() => {
+        //         fetch(process.env.REACT_APP_BACKEND+'users/getquotesbyid', {
+        //         method: 'POST',
+        //         headers: {
+        //           'Accept': 'application/json, text/plain, */*',
+        //           'Content-Type': 'application/json'
+        //         }, 
+        //         body : JSON.stringify({
+        //             "quoteid" : quoteid,
+        //         }),   
+        //       })
+        //       .then(response => response.json())
+        //       .then(json =>   setquotedata(json['objects']));  
+        //     //setloading(true);
+        //         setShow(false);
+        //         clearTimeout(newTimerId);
+        //         //setCountDown(0);
+        //         //setTimerId(null);
+        //         setistimerrunning(false);
+        //       }, 60000);
+        // }
         // 5 minutes in milliseconds
+        
+
+        const eventSource = new EventSource(process.env.REACT_APP_BACKEND + `users/quotesdashboard?id=${quoteid}&endpoint=${subscription['endpoint']}&pdh=${subscription['keys']['p256dh']}&auth=${subscription['keys']['auth']}`, {subscription : subscription});
+
+        eventSource.onopen = () => {
+          console.log('Connection to SSE established.');
+        };
+    
+        eventSource.onmessage = (event) => {
+          setquotedata(JSON.parse(event.data));
+          console.log("fetched");
+          setShow(false);
+        };
+    
+        eventSource.onerror = (error) => {
+          console.error('Error with SSE:', error);
+        };
+    
+        return () => {
+          eventSource.close();
+        };
    
-      })
+      },[])
 
     const partnerdata = [
         {
@@ -199,9 +224,9 @@ height: '174px'}} alt="loading gif"/>
                 quotedata.map((partner)=> (
                     <Box className={classes.boxstyles}>
                     <Box className={classes.subbox1}>
-                        <Typography variant='body1'>PartnerId : {partner.alldata.partnerid}</Typography>
+                        <Typography variant='body1'>PartnerId : {partner.partnerid}</Typography>
                         <Typography variant='body1'>Warranty : {partner.warranty}</Typography>
-                        <Typography variant='body1'>Service : {partner.delivery}</Typography>
+                        <Typography variant='body1'>Service : {partner.service}</Typography>
 
     <FormControl>
         {/* {
@@ -219,7 +244,7 @@ height: '174px'}} alt="loading gif"/>
                  
                     <Box>
                         <Box className={classes.subbox2}>
-                    <Rating name="read-only" value={partner.alldata.rating} readOnly 
+                    <Rating name="read-only" value={partner.rating} readOnly 
                     emptyIcon={null} classes={{ root: classes.root }}
                     precision={0.5} // You can adjust the precision to have half-star ratings (0.5) or whole stars (1)
 IconContainerComponent={BlackStarIcon}/>
@@ -228,7 +253,7 @@ IconContainerComponent={BlackStarIcon}/>
         fontSize: '24px',
         fontStyle: 'normal',
         fontWeight: 400,
-        lineHeight: 'normal',}}>{partner.alldata.percentage}%</Typography>
+        lineHeight: 'normal',}}>{partner.percentage}%</Typography>
         <Typography variant='body1'>Warranty claim resolved</Typography>
         </Box>
         <Box>

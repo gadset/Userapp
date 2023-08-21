@@ -12,6 +12,9 @@ import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { HashRouter } from 'react-router-dom/cjs/react-router-dom';
+import * as serviceWorker from './serviceWorker';
+import { SubscribeUser } from './subscription';
+
 const firebaseConfig = {
   // ...
   // The value of `databaseURL` depends on the location of the database
@@ -27,7 +30,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 
 // Initialize Realtime Database and get a reference to the service
@@ -50,3 +53,6 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+serviceWorker.register();
+
+SubscribeUser()

@@ -6,7 +6,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import address from '../Images/summarypage/address.svg';
 import calendar from '../Images/summarypage/calendar.svg';
 import { Edit } from '@mui/icons-material';
@@ -14,6 +14,7 @@ import { Link , useHistory, useLocation} from 'react-router-dom';
 import { makeStyles, withStyles } from "@mui/styles";
 import MuiTableCell from "@mui/material/TableCell";
 import FormLabel from '@mui/material/FormLabel';
+import { setpartnerValue } from "../reduxstore";
 
 const TableCell = withStyles({
   root: {
@@ -31,9 +32,10 @@ export default function PriceSummary1({handlenextpage, delivery}){
   console.log(date1);
   const mobile = useSelector((state) => state.mobile.value);
   const image = useSelector((state)=>state.image.value);
-const partner = useSelector((state)=> state.partner.value);
+let partner = Object.assign({},useSelector((state)=> state.partner.value));
 const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
   const history = useHistory();
+  const dispatch = useDispatch();
  // console.log(address1);
  const [width, setWidth] = useState(window.innerWidth);
  //const isMobile = width <= 768;
@@ -53,8 +55,15 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
 
   const handleCheckboxChange1 = (event) => {
     setIsChecked1(event.target.checked);
-  setamounttotal(amounttotal+1000);
-
+    if(event.target.checked === true){
+      setamounttotal(amounttotal+1000);
+      partner['amount'] = amounttotal + 1000;
+    }
+    else{
+      setamounttotal(amounttotal-1000);
+      partner['amount'] = amounttotal - 1000;
+    }
+  dispatch(setpartnerValue(partner));
   };
 
 
@@ -80,11 +89,10 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
     const gst = Math.ceil(total/10) ;
     total = gst + total;
     return(
-        <Grid container spacing={2} sx={{width:'100%', display:'flex', flexDirection:'column', justifyContent:'center', padding:'8px', marginLeft: 0, marginTop : '8px',textAlign:'left', alignItems:'center'}}>
+        <Grid container spacing={2} sx={{width:'100%', display:'flex', flexDirection:'column', padding:'8px', marginLeft: '16px', marginTop : '8px',textAlign:'left', alignItems:'start'}}>
   
-            <Typography variant="h4">Price Summary </Typography>
-        <Typography variant="body1" sx={{marginLeft:'8px'}}>Device : {model1}</Typography>
-        <Typography variant="h5">Selected Issues:</Typography>
+        <Typography variant="body1" sx={{marginLeft : 0}} >Device : {model1}</Typography>
+        <Typography variant="h5" sx={{marginLeft : 0}} >Selected Issues:</Typography>
         {
           issues1.map((iss) => (
             <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%'}}>
@@ -93,9 +101,9 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
           ))
         }
 
-<Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%',alignItems:'center'}}>
+<Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row',alignItems:'center', marginLeft : 0}}>
          <FormControl>
-<FormControlLabel control={<Checkbox sx={{padding:'0px', marginLeft:'8px'}}  checked={isChecked1}
+<FormControlLabel control={<Checkbox sx={{padding:'0px'}}  checked={isChecked1}
         onChange={handleCheckboxChange1} />} label={<>
             <Typography variant='body1'>Delivery and pickup by gadset </Typography></>}/>
     </FormControl>
@@ -105,30 +113,29 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
             <Typography variant="body1">Promo</Typography>
             <Typography variant="body1">Apply</Typography>
         </Box> */}
-        <Divider sx={{width :'80%', m:1}}/>
-        <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%',  margin:'auto'}}>
-            <Typography variant="h4">{model1}</Typography>
-            <Typography variant="body1">Rs . {amounttotal}</Typography>
+        <Divider sx={{width :'80%', marginTop:1}}/>
+        <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', alignItems:'center'}}>
+            <Typography variant="h4">Total Amount</Typography>
+            <Typography variant="body1">Rs .{amounttotal}</Typography>
         </Box>
 
-        <Grid item sx={{marginTop : '8px'}}>
+        <Box item sx={{marginTop : '8px'}}>
       <Box sx={{display:'flex', flexDirection:'row'}}>
         <img src={address} alt="address icon" />
         <div>
-        <Typography>Address: {address1['phone']}, {address1['name']}, {address1['flat']} </Typography>
-        <Typography>{address1['city']}, {address1['landmark']}, {address1['pin']}</Typography>
+        <Typography sx={{flexWrap : 'wrap', marginLeft : '8px'}}>Address: {address1['phone']}, {address1['name']}, {address1['flat']} ,  {address1['city']}, {address1['landmark']}, {address1['pin']}</Typography>
         </div>
       </Box>
-    </Grid>
+    </Box>
 
-    <Grid item sx={{marginTop : '8px'}}>
+    <Box item sx={{marginTop : '8px'}}>
       <Box sx={{display:'flex', flexDirection:'row'}}>
         <img src={calendar} alt="address icon" />
         <div>
-        <Typography>Date : {date1['date']} </Typography>
+        <Typography sx={{marginLeft : '8px'}}>Date : {date1['date']} </Typography>
         </div>
       </Box>
-    </Grid>
+    </Box>
         
             <FormControlLabel
         control={<Checkbox checked={isChecked} onChange={handleCheckboxChange}/>}
@@ -148,7 +155,7 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
 borderRadius: '20px', marginTop:'4px', alignSelf:'center', width:'80%', mb:1}} control={<Radio />} label="Pay total online" />
         <FormControlLabel sx={{background: '#FBFBFB',
 boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-borderRadius: '20px', marginTop:'4px',  alignSelf:'center', width:'80%', mb:1}} value="later" control={<Radio />} label="Pay later" />
+borderRadius: '20px', marginTop:'4px',  alignSelf:'center', width:'80%', mb:1}} value="later" control={<Radio />} label="Pay Booking - 200" />
       </RadioGroup>
     </FormControl>
     </Box> */}

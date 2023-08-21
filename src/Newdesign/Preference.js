@@ -9,9 +9,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import React , {useState} from 'react';
 import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { useTheme } from '@emotion/react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ColorRing } from 'react-loader-spinner';
+import { setquoteidValue } from '../reduxstore';
+import { toast } from 'react-toastify';
 
 const Preference = () => {
   const location = useLocation();
@@ -19,9 +21,12 @@ const Preference = () => {
     const [value2, setValue2] = useState('With warranty');
     const [value3, setValue3] = useState('Normal');
     const model = useSelector((state)=>state.model.value);
+    const device = useSelector((state)=>state.device.value);
+    const userid = useSelector((state)=>state.userid.value)
     const history = useHistory();
     const issuearray = location.state.issues;
     const [loading, setloading] = useState(false);
+    const dispatch = useDispatch();
     const theme = useTheme();
     const handleChange = (e) => {
         setValue(e.target.value);
@@ -46,25 +51,35 @@ const Preference = () => {
         if(user){
           uid = user.uid;
         }
-        const response = await fetch('http://localhost:8003/sendquote', {
+       fetch(process.env.REACT_APP_BACKEND + 'users/sendquote', {
             method: 'POST',
             headers: {
               'Accept': 'application/json, text/plain, */*',
               'Content-Type': 'application/json'
             }, 
             body : JSON.stringify({
-              "uid" : uid,
+              "device" :device,
               "model" : model,
               "issue" : issuearray,
               "quality" : value3,
               "warranty" : value2,
-              "service": value
+              "service": value,
+              "customerid" : userid,
             }),   
-          });
-      setloading(false);
+          })
+          .then(response => response.json())
+              .then(json => {   dispatch(setquoteidValue(json['id']));
+              localStorage.setItem("quoteidrecent", json['id']);
+              console.log(json['id']) ;
+              toast.success(json['message']);
+              setloading(false);
       history.push({
         pathname : '/getquotes',
-      })
+      }); 
+    })  
+       
+     
+    
 
       }
     return(

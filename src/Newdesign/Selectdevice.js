@@ -18,11 +18,12 @@ import vivo from '../logos/vivo.svg';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { useState } from 'react';
 import { getDatabase, ref, child, get } from "firebase/database";
-import { setMobileValue, setModelValue } from '../reduxstore';
+import { setMobileValue, setModelValue, setUserIdValue, setdeviceValue } from '../reduxstore';
 import { useDispatch } from 'react-redux';
 import search from './Newlogos/search.svg';
 import { useTheme } from '@emotion/react';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { toast } from 'react-toastify';
 
 const StyledTextField = styled(TextField)`
   background-color: #D9D9D9;
@@ -42,7 +43,8 @@ const Selectdevice = () => {
       let bra = e.target.value;
       console.log(bra);
       setBrand(bra);
-      const dbRef = ref(getDatabase());
+      try{
+        const dbRef = ref(getDatabase());
         get(child(dbRef, bra)).then((snapshot) => { 
           if (snapshot.exists()) {
             setDevices(snapshot.val());    
@@ -53,8 +55,14 @@ const Selectdevice = () => {
               console.log("No data available");
             }
           }).catch((error) => {
-            console.error(error);
+           // console.error(error);
+           toast.error("some error occured");
           });
+      }
+      catch{
+        toast.error("some error occured");
+      }
+     
     }
     
     const data1 = [
@@ -72,22 +80,24 @@ const Selectdevice = () => {
     ]
 
     const handleDeviceSelected = () =>{
-      dispatch(setModelValue(brand + phone));
+      dispatch(setModelValue(phone));
+      dispatch(setdeviceValue(brand));
       if(localStorage.getItem("verified")!=='yes'){
         history.push('/numberinput');
       }
       else{
-        dispatch(setMobileValue(localStorage.getItem('phonenumber')))
+        dispatch(setMobileValue(localStorage.getItem('phonenumber')));
+        dispatch(setUserIdValue(localStorage.getItem('gadsetid')));
         history.push({
           pathname : '/issuepage',
         })
       }
-    
     }
+    
     return(
         <Grid container sx={{display:'flex', justifyContent:'center', textAlign:'left', marginTop:'10px'}}>
           {
-            device === 'phone' ? <>
+            device === 'Mobile' ? <>
              <Grid item sx={{width:'95%'}}>
                 <Typography variant='h4'>Select Brand</Typography>
             <StyledTextField

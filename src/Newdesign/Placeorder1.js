@@ -69,10 +69,10 @@ const number = localStorage['number'];
             <Typography variant="h4">Service cost</Typography>
             <Typography variant="body1">Rs. {amounttotal}</Typography>
         </Box>
-        {/* <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', mt:2}}>
+        <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', mt:2}}>
             <Typography variant="body1">Additional charges</Typography>
             <Typography variant="body1">0</Typography>
-        </Box> */}
+        </Box>
         <Divider sx={{width :'80%', m:1}}/>
         <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%',alignItems:'center'}}>
             <Typography variant="h4">Total amount</Typography>

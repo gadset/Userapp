@@ -34,6 +34,7 @@ import { useHistory } from "react-router-dom";
 import search from './Newlogos/search.svg';
 import banner from './Newlogos/gadset_banner.png';
 import circle from './Newlogos/circle.svg';
+import {regSw, subscribe} from '../helper';
 const useStyles = makeStyles({
   card1: {
     display: "flex",
@@ -110,11 +111,20 @@ const Home1 = () => {
   ];
 
   const devices = [
-    { name: "phone", img: mobile },
-    { name: "laptop", img: laptop },
-    { name: "watches", img: smartwatch },
+    { name: "Mobile", img: mobile },
+    { name: "Laptop", img: laptop },
+    { name: "Watches", img: smartwatch },
     { name: "Tablet", img: Tablet },
   ];
+  // async function subscribe(){
+  //   try {
+  //     const serviceWorkerReg = await regSw();
+  //      subscribe (serviceWorkerReg);
+  //     console.log("good");
+  //   } catch (error) {
+  //     console.log (error);
+  //   }
+  // }
 
   const handlenextpage = (devi) => {
     console.log("hello");
@@ -211,14 +221,8 @@ const Home1 = () => {
                 sx={{ height: "72px", width: "72px" }}
               />
               <Typography
-                style={{
-                  fontSize: "12px",
-                  fontFamily: "Poppins",
-                  fontStyle: "normal",
-                  lineHeight: "18px",
-                  fontWeight: 400,
-                  color: "#494949",
-                }}
+                variant="body2"
+                sx={{fontWeight: '600'}}
               >
                 {device["name"]}
               </Typography>

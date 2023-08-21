@@ -209,7 +209,7 @@ useEffect(() => {
                 <HomeIcon/>
                   <Typography textAlign="center" variant='body1' style={{margin:'8px'}}>Home</Typography>
                 </MenuItem>
-                <MenuItem key='profile' onClick={() => handleCloseNavMenu('/')}>
+                <MenuItem key='profile' onClick={() => handleCloseNavMenu('/profile')}>
                 <AccountCircleOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Profile</Typography>
                 </MenuItem>

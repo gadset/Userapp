@@ -37,13 +37,28 @@ import Getquotes from "./Newdesign/Getquotes";
 import Phonesignin from "./Newdesign/Phonesignin1";
 import StepperForm1 from "./Newdesign/Stepper1";
 import Orders from "./Newdesign/orders";
+import Profile from "./Newdesign/Profile";
+import {regSw, subscribe} from './helper';
+
 export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
 
   function handleWindowSizeChange() {
       setWidth(window.innerWidth);
   }
+  async function subscribe(){
+    try {
+      const serviceWorkerReg = await regSw ();
+      await subscribe (serviceWorkerReg);
+      console.log("good");
+    } catch (error) {
+      console.log (error);
+    }
+  }
+
   useEffect(() => {
+//  subscribe();
+
       window.addEventListener('resize', handleWindowSizeChange);
       return () => {
           window.removeEventListener('resize', handleWindowSizeChange);
@@ -85,6 +100,9 @@ export default function App() {
           </Route>
           <Route path='/orders'>
             <Orders/>
+          </Route>
+          <Route path="/profile">
+            <Profile/>
           </Route>
         </Switch>
         </Grid>

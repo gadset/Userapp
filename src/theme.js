@@ -45,7 +45,7 @@ lineHeight: 'normal',
       fontFamily : "Work Sans",
       fontSize : '18px',
       fontWeight: '500',
-      margin : '8px',
+      margin : '4px',
      },
      h5 : {
       color: '#000',
@@ -54,7 +54,7 @@ fontSize: '20px',
 fontStyle: 'normal',
 fontWeight: '400',
 lineHeight: 'normal',
-margin : '8px',
+margin : '4px',
     }
   },
   components: {
