@@ -5,13 +5,9 @@ import {
   Grid,
   Typography,
   Box,
-  Divider,
-  FormControl, FormControlLabel, Checkbox, FormGroup, InputLabel, Chip
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAddressValue } from "../reduxstore";
-import MyLocationIcon from '@mui/icons-material/MyLocation';
-import { MyLocation } from "@mui/icons-material";
 import { useTheme } from "@emotion/react";
 import Geocode from "react-geocode";
 import { toast } from "react-toastify";
@@ -26,6 +22,7 @@ const AddressForm1 = ({onData, handlenextpage}) => {
   const [state, setState] = useState("");
   const dispatch = useDispatch();
   const theme = useTheme()
+
 const [place, setplace] = useState("")
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,42 +39,10 @@ const [place, setplace] = useState("")
 
   const [latlng, setlatlng] = useState({});
   Geocode.setApiKey("AIzaSyBKIByYCgUyIZYIfQUchm4ZVtowK0tvfhg");
- 
+  console.log(localStorage.getItem('DeviceId'))
+  const storedData = localStorage.getItem('DeviceBook');
+  console.log(storedData)
 
-  // useEffect(()=>{
-  //   const getLocation = () => {
-  //     if (!navigator.geolocation) {
-  //       console.log('Geolocation is not supported by your browser');
-  //     } else {
-  //       console.log('Locating...');
-  //       navigator.geolocation.watchPosition((position) => {
-         
-  //         console.log(position.coords)
-  //     //   setLat(position.coords.latitude);
-  //       // setLng(position.coords.longitude);
-  //       setlatlng({
-  //         lat : position.coords.latitude,
-  //         lng : position.coords.longitude,
-  //       })
-  
-  //       Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(
-  //         (response) => {
-  //           const address = response.results[0].formatted_address;
-  //           console.log(address);
-  //         },
-  //         (error) => {
-  //           console.error(error);
-  //         }
-  //       );
-        
-  //       console.log('done')
-  //       }, () => {
-  //         console.log('Unable to retrieve your location');
-  //       });
-  //     }
-  //   }
-  //   getLocation();
-  // }, [])
   const handlenext = () => {
     const data = {
       'name' : name,
@@ -106,20 +71,13 @@ const [place, setplace] = useState("")
     
   }
   return (
-    <Grid container sx={{ marginLeft: 0, width: "100%", display:'flex', flexDirection:'column', alignItems:'center' ,marginBottom: '30px',
- }}>
+    <Grid container sx={{ marginLeft: 0, width: "100%", display:'flex', flexDirection:'column', alignItems:'center' ,marginBottom: '30px',}}>
       <Typography variant="h5" sx={{m:1}}>
        Add your Address
       </Typography>
-      {/* <Button sx={{background:' #F0F0F0',
-border:' 1px solid #EDECEC',
-borderRadius: '20px', color:'black', width:'90%'}} variant="contained"> Use my current location</Button>
-      <Divider sx={{margin:'4px', color:'black'}} /> */}
-        <Grid container spacing={2} sx={{ width: "95%",  display:'flex', flexDirection:'column',marginTop:theme.spacing(1),
-    borderRadius : '10px' ,
-    textAlign:'left' }}>
+        <Grid container spacing={2} sx={{ width: "95%",  display:'flex', flexDirection:'column',marginTop:theme.spacing(1),borderRadius : '10px' ,textAlign:'left' }}>
    
-        <Typography variant="h4">Name<sup>*</sup></Typography>
+          <Typography variant="h4">Name<sup>*</sup></Typography>
             <TextField
               variant="outlined"
               required
@@ -131,7 +89,7 @@ borderRadius: '20px', color:'black', width:'90%'}} variant="contained"> Use my c
               onChange={(e) => setName(e.target.value)}
             />
        
-            <Typography variant="h4">Mobile Number<sup>*</sup></Typography>
+          <Typography variant="h4">Mobile Number<sup>*</sup></Typography>
             <TextField
               variant="outlined"
               required
@@ -143,11 +101,7 @@ borderRadius: '20px', color:'black', width:'90%'}} variant="contained"> Use my c
               onChange={(e) => setMobileNumber(e.target.value)}
             />
             
-            <Typography variant="h4"
-            >Address<sup>*</sup></Typography>
-            {/* <Button 
-            sx={{borderRadius: '5px',
-background: '#A5A4A4'}} ><MyLocationIcon sx={{color:'10px'}}/> Use my current location</Button> */}
+            <Typography variant="h4">Address<sup>*</sup></Typography>
 
             <Grid container sx={{display:'flex', flexDirection : 'row', mt:1, mb:1, justifyContent:'space-between'}}>
             
@@ -163,7 +117,7 @@ background: '#A5A4A4'}} ><MyLocationIcon sx={{color:'10px'}}/> Use my current lo
               sx={{width:'48%'}}
             /> 
 
-<TextField
+            <TextField
               variant="outlined"
               required
               size='small'
@@ -191,7 +145,7 @@ background: '#A5A4A4'}} ><MyLocationIcon sx={{color:'10px'}}/> Use my current lo
               sx={{width:'48%'}}
             />
 
-<TextField
+            <TextField
               variant="outlined"
               required
               fullWidth
@@ -217,12 +171,6 @@ background: '#A5A4A4'}} ><MyLocationIcon sx={{color:'10px'}}/> Use my current lo
               onChange={(e) => setLandmark(e.target.value)}
             />
 
-          
-            {/* <Typography variant="h4">Type of address<sup>*</sup></Typography>
-            <Box sx={{display:'flex', flexDirection : 'row'}}>
-                <Chip label="Home" sx={{background:'#D9D9D9',mr:1}} onClick={()=>setplace("home")}/>
-                <Chip label='Office' sx={{background:'#D9D9D9',mr:1}} onClick={()=>setplace("office")} />
-            </Box> */}
         </Grid>
         
         <Box sx={{ mt: 1, textAlign: "right" }}>

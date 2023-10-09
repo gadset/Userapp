@@ -89,9 +89,10 @@ function Responsiveappbarnew() {
   //  setAnchorElNav(event.currentTarget);
   setAnchorElNav(true);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(true);
-  };
+
+  // const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorElUser(true);
+  // };
 
   const handleCloseNavMenu = (nextlink) => {
   //  setAnchorElNav(null);
@@ -122,7 +123,7 @@ useEffect(() => {
 
 
   return (
-    <Box spacing={2} container style={{display : 'flex', flexGrow:1, flexDirection : isMobile ? "column" : "row", alignItems:'center', justifyContent:'flex-start',}}>
+    <Box spacing={2} container style={{display : 'flex', flexGrow:1, flexDirection : isMobile ? "column" : "row", alignItems:'center', justifyContent:'flex-start',zIndex: '999'}}>
     <AppBar position="static" color="transparent" sx={{marginTop:0,boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters >

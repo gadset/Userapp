@@ -33,6 +33,11 @@ export default function Paymentnew(){
  partner['date'] = d.getDate() + '/' + d.getMonth() + '/' + d.getYear();
 const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
 console.log(amounttotal);
+
+const device = localStorage.getItem('DeviceBook');
+
+const model = localStorage.getItem('ModelBook');
+
 const number = localStorage['number'];
     const history = useHistory();
 
@@ -43,7 +48,6 @@ const number = localStorage['number'];
         "issues" : issues1,
         "partner" : partner
         };
-//localStorage.setItem('orderdata', JSON.stringify(data));
 
     var total = 0;
     for (let i = 0; i < issues1.length; i++) {
@@ -90,10 +94,9 @@ const number = localStorage['number'];
             'Content-Type': 'application/json'
           },
           body : JSON.stringify({
-            amount : value === "online" ? amounttotal*100 : 200*100 ,
+            amount : value === "online" ? amounttotal*100 : 200*100,
           }),   
         });
-        //axios.post("http://localhost:8000/payment/orders");
     
         if (!result) {
             alert("Server error. Are you online?");
@@ -102,11 +105,10 @@ const number = localStorage['number'];
     
         const js = await result.json();
        console.log(js);
-        // Getting the order details back
         const { amount, id: order_id, currency } = js;
-    console.log(amount);
+        console.log(amount);
         const options = {
-            key: "rzp_test_hjnHnpkynNqw7v", // Enter the Key ID generated from the Dashboard
+            key: "rzp_test_hjnHnpkynNqw7v", 
             amount: amount,
             currency: currency,
             name: "Gadset",
@@ -120,7 +122,6 @@ const number = localStorage['number'];
                     razorpayOrderId: response.razorpay_order_id,
                     razorpaySignature: response.razorpay_signature,
                 };
-               // axios.post("http://localhost:8000/payment/success", data) 
                 const result = await fetch(process.env.REACT_APP_BACKEND+'payment/success' , {
                   data : data,
                   method: 'POST',
@@ -146,17 +147,7 @@ const number = localStorage['number'];
                     pathname : '/'
                   });
                 })
-
-              
-               //alert(result.data.msg);
             },
-            // prefill: {
-            //     name:address1['name'],
-            //     contact: mobile,
-            // },
-            // notes: {
-            //     address: address1['city'],
-            // },
             theme: {
                 color: "#61dafb",
             },
@@ -169,7 +160,7 @@ const number = localStorage['number'];
     return(
         <Grid container sx={{display:'flex', flexDirection:'column', padding:'8px', width:'100%', justifyContent:'center', alignItems:'center',  textAlign:'start'}}>
         <Typography variant="h5">Payment</Typography>
-        <Typography variant="body2">Selected Device : {model1}</Typography>
+        <Typography variant="body2">Selected Device : {device}{model} </Typography>
         <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', alignItems:'center'}}>
             <Typography variant="h4">Service cost</Typography>
             <Typography variant="body1">Rs. {amounttotal}</Typography>
@@ -195,47 +186,15 @@ const number = localStorage['number'];
       >
         <FormControlLabel value="online" sx={{background: '#FBFBFB',
         boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-borderRadius: '20px', marginTop:'4px', alignSelf:'center', width:'80%', mb:1}} control={<Radio />} label="Pay total online" />
+        borderRadius: '20px', marginTop:'4px', alignSelf:'center', width:'80%', mb:1}} control={<Radio />} label="Pay total online" />
         <FormControlLabel sx={{background: '#FBFBFB',
-boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-borderRadius: '20px', marginTop:'4px',  alignSelf:'center', width:'80%', mb:1}} value="later" control={<Radio />} label="Pay booking - 200" />
+        boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
+        borderRadius: '20px', marginTop:'4px',  alignSelf:'center', width:'80%', mb:1}} value="later" control={<Radio />} label="Pay booking - 200" />
       </RadioGroup>
     </FormControl>
     </Box> 
 
-            {/* <Typography variant="h6"> Selected Issue </Typography>
-            <TableContainer component={Paper}>
-  <Table sx={{ minWidth: 400 }} aria-label="simple table">
-  <TableBody>
-      {issues1.map((row) => (
-        <TableRow
-          key={row.name}
-          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-        >
-          <TableCell component="th" scope="row">
-            {row.name}
-          </TableCell>
-          <TableCell align="right">{row.cost}</TableCell>
-        </TableRow>
-      ))}
-      <TableRow key='gst'
-          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-            <TableCell component="th" scope="row">
-            GST/CGST
-          </TableCell>
-          <TableCell align="right">{gst}</TableCell>
-          </TableRow>
-      <Divider/>
-<TableRow key='total'
-          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-            <TableCell component="th" scope="row">
-            Total
-          </TableCell>
-          <TableCell align="right">{total}</TableCell>
-          </TableRow>
-    </TableBody>
-  </Table>
-</TableContainer> */}
+            
 <Button variant="contained" onClick={displayRazorpay} sx={{width:'200px', margintop :'10px', margin:'auto'}}>Pay Now</Button>
 </Grid>
 </Grid>

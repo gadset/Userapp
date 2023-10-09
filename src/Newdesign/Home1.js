@@ -21,10 +21,6 @@ import poco from "../logos/poco.svg";
 import realme from "../logos/realme.svg";
 import samsung from "../logos/samsung.svg";
 import vivo from "../logos/vivo.svg";
-// import mobile from "../Images/mobile.svg";
-// import laptop from "../Images/laptop.svg";
-// import watches from "../Images/watches.svg";
-// import tablet from "../Images/tablet.svg";
 import mobile from './Newlogos/phone.svg';
 import laptop from './Newlogos/laptop.svg';
 import smartwatch from './Newlogos/smartwatch.svg';
@@ -35,6 +31,9 @@ import search from './Newlogos/search.svg';
 import banner from './Newlogos/gadset_banner.png';
 import circle from './Newlogos/circle.svg';
 import {regSw, subscribe} from '../helper';
+import { useCookies } from 'react-cookie';
+
+
 const useStyles = makeStyles({
   card1: {
     display: "flex",
@@ -67,7 +66,10 @@ const useStyles = makeStyles({
     flexWrap : 'nowrap',
     flexShrink : '0',
     animation: '$scroll 10s linear infinite', 
-    minWidth: '100%'// Adjust the duration (10s) as per your preference
+    minWidth: '100%',// Adjust the duration (10s) as per your preference
+    "&:hover": {
+      animationPlayState: 'paused'
+    }
   },
   '@keyframes scroll': {
     '0%': {
@@ -83,6 +85,10 @@ const Home1 = () => {
   const theme = useTheme();
   const classes = useStyles();
   const history = useHistory();
+  const [cookies] = useCookies(['access_token']);
+  
+  console.log(cookies)
+  console.log(cookies.access_token)
 
   const bidscompleted = [
     { name: "iphone-13", amount: "4500" },
@@ -93,8 +99,6 @@ const Home1 = () => {
     { name: "iphone-13", amount: "100" },
     {name : "iphone-13", amount : '340'},
     {name : "iphone-13", amount : '901'},
-    // {name : "iphone-13", amount : '09'},
-    // {name : "iphone-13", amount : '09'},
   ];
 
   const data1 = [
@@ -116,15 +120,7 @@ const Home1 = () => {
     { name: "Watches", img: smartwatch },
     { name: "Tablet", img: Tablet },
   ];
-  // async function subscribe(){
-  //   try {
-  //     const serviceWorkerReg = await regSw();
-  //      subscribe (serviceWorkerReg);
-  //     console.log("good");
-  //   } catch (error) {
-  //     console.log (error);
-  //   }
-  // }
+
 
   const handlenextpage = (devi) => {
     console.log("hello");
@@ -150,35 +146,11 @@ const Home1 = () => {
     <Typography variant="body1">Replacement - Rs.{bid.amount}</Typography>
   </Box>
 </Box>
-            // <Card
-            //   sx={{
-            //     width: "200px",
-            //     padding: "4px",
-            //     border: "1px solid black",
-            //     borderRadius: "0px",
-            //     background : 'transparent'
-            //   }}
-            // >
-            //   <Box sx={{ display: "flex", flexDirection: "column" }}>
-            //     <Typography variant="body2">{bid.name}</Typography>
-            //     <Typography variant="body2">screen replacement</Typography>
-            //     <Typography variant="body2">Rs : {bid.amount}</Typography>
-            //   </Box>
-            // </Card>
+            
           ))}
         </Box>
       </Grid>
-      {/* <Grid
-        item
-        sx={{ width:'86%', marginTop:'8px'}}
-      >
-        <SearchComponent label="" placeholder="Search device" />
-        <SearchComponent label="" placeholder="Search Brand" />
-        <SearchComponent label="" placeholder="Search Model" />
-      </Grid> */}
-      {/* <Typography sx={{marginBottom:'0px'}} variant="body1">
-        or
-      </Typography> */}
+      
       <Typography variant="h5">
         Select Device
       </Typography>
@@ -230,23 +202,9 @@ const Home1 = () => {
           </Grid>
         ))}
       </Grid>
-      {/* <Grid item container spacing={1} sx={{width:'100%', display:'flex',justifyContent:'center', alignItems :'center',}}>
+      <Grid>
 
-            {
-                data1.map((lo) => (
-            <Grid item xs={4} style={{ display:'flex',justifyContent:'center', alignItems :'center', flexDirection:'column', textAlign:'center'}}>
-              <Card sx={{borderRadius :'20px'}} onClick={() => handlenextpage()} className={classes.card1} elevation={2}>
-                <CardMedia
-                  image={lo["logo"]}
-                  title={lo["name"]}
-                 sx={{ height: '70px', width:'90px', borderRadius:'20px'}}
-                />
-              </Card>
-              <Typography style={{color: '#494949',fontSize : '14px',fontFamily:'Open Sans', fontStyle:'normal',lineHeight : '16px', fontWeight :600, margin:'4px'}}>{lo["name"]}</Typography>
-            </Grid>
-                ))
-            }
-          </Grid> */}
+      </Grid>
     </Grid>
   );
 };

@@ -19,6 +19,7 @@ const useStyles = makeStyles({
         height: '100%',
         textAlign:'left',
         background : '#E3E3E3',
+        position: 'relative',
       },
       description1: {
         display: '-webkit-box',
@@ -31,6 +32,8 @@ const useStyles = makeStyles({
       button1: {
        width :'100%',
        height:'16px',
+       position: 'absolute',
+       bottom: 0
       },
       modal: {
         display: 'flex',
@@ -49,10 +52,10 @@ const useStyles = makeStyles({
         bottom:0,
       },
       heading : {
-fontSize: '12px!important',
-fontStyle: 'normal',
-fontWeight: '500!important',
-lineHeight :'normal!important'
+        fontSize: '12px!important',
+        fontStyle: 'normal',
+        fontWeight: '500!important',
+        lineHeight :'normal!important'
       },
       desissue : {
         fontSize: '12px!important',
@@ -79,12 +82,11 @@ const SelectIssue = () => {
     }
 
     const handlegetquotes = async() => {
- dispatch(setIssueValue(issuearray));
- history.push({
-  pathname : '/preference',
-  state : {issues : issuearray}
- })
-
+      dispatch(setIssueValue(issuearray));
+      history.push({
+        pathname : '/preference',
+        state : {issues : issuearray}
+      })
     };
 
     const handleclickremove = (index) => {
@@ -92,6 +94,7 @@ const SelectIssue = () => {
      array1.splice(index,1);
      setissuearray(array1);
     }
+
     const issues1 = [
         {
           name: 'Glass Replacement ',
@@ -133,58 +136,57 @@ const SelectIssue = () => {
           img : battery1,
         },
        ]
+
     return(
         <Box sx={{marginTop:theme.spacing(2), marginBottom:'50px',display:'flex', justifyContent:'center',flexDirection:'column', alignItems:'center'}}>
             <Typography variant='h4'>Select Issue</Typography>
-<Grid container sx={{display:'flex', justifyContent:'space-between', width:'95%', marginTop:theme.spacing(1), marginBottom : '60px'}}>
-    
-{
-            issues1.map((issue) => (
-              <Grid item xs={5} sx={{margin:theme.spacing(1)}}>
-              <Card className={classes.cardpre} sx={{borderRadius : '0px', width:'100%'}}>
-               
-                  <CardContent sx={{padding:theme.spacing(0.5)}}>
-                  <CardMedia
-                    sx={{height:'100px', width:'100%'}} 
-                    image={issue['img']}
-                    title="Image"
-                  />
-                    <Typography sx={{WebkitLineClamp:2, wordWrap: 'breakword'}} className={classes.heading} noWrap>
-                      {issue['name']}
-                    </Typography>
-                    <Typography
-                  className={classes.desissue}
-                  sx={{ WebkitLineClamp: 3}}   
-                >
-                  {issue['description']}
-                </Typography>
-                  </CardContent>
-<Button className={classes.button1} onClick={()=> handleAddIssue(issue['name'])} sx={{borderRadius:'0px', background: '#D0D0D0'}}>Add</Button>
-            </Card>
+            <Grid container sx={{display:'flex', justifyContent:'space-between', width:'95%', marginTop:theme.spacing(1), marginBottom : '60px'}}>
+              {
+                issues1.map((issue) => (
+                  <Grid item xs={5} sx={{margin:theme.spacing(1), position: 'relative'}}>
+                    <Card className={classes.cardpre} sx={{borderRadius : '0px', width:'100%', position: 'relative'}}>
+                        <CardContent sx={{padding:theme.spacing(0.5)}}>
+                          <CardMedia
+                            sx={{height:'100px', width:'100%'}} 
+                            image={issue['img']}
+                            title="Image"
+                          />
+                          <Typography sx={{WebkitLineClamp:2, wordWrap: 'breakword'}} className={classes.heading} noWrap>
+                            {issue['name']}
+                          </Typography>
+                          <Typography
+                            className={classes.desissue}
+                            sx={{ WebkitLineClamp: 3, height: '60px'}}   
+                          >
+                            {issue['description']}
+                          </Typography>
+                        </CardContent>
+                      <Button className={classes.button1} onClick={()=> handleAddIssue(issue['name'])} sx={{borderRadius:'0px', background: '#D0D0D0', position: 'absolute', bottom: '0'}}>Add</Button>
+                    </Card>
+                  </Grid>
+                ))
+              }
             </Grid>
-            ))
-          }
-</Grid>
 
-       {
-        issuearray.length>0 ?  
-        <Grid container sx={{display:'flex', alignItems:'center', justifyContent:'space-between', position:'absolute', bottom:'54px', padding:theme.spacing(2), borderRadius: '10px 10px 0px 0px',
-        background: '#D9D9D9'}}>
-           <Box sx={{display:'flex', flexDirection:'column'}} >
-          {
-          issuearray.map((isue, index)=>(
-            <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}} >
-              <Typography variant='body1'><AddIcon sx={{fontSize:'10px'}}/>{isue}</Typography>
-              <IconButton onClick={() => handleclickremove()}><HighlightOffIcon sx={{color : "#000"}}/></IconButton>
-            </Box>
-          ))
-        }</Box>
-        <Button sx={{borderRadius : '20px', background: '#333', color : '#FFF!important', height:'24px'}} onClick={handlegetquotes}>Continue</Button>
-        </Grid>
-        : <></>
-       }  
+            {
+              issuearray.length>0 ?  
+              <Grid container sx={{display:'flex', alignItems:'center', justifyContent:'space-between', position:'fixed', bottom:'54px', padding:theme.spacing(2), borderRadius: '10px 10px 0px 0px',background: '#D9D9D9'}}>
+                <Box sx={{display:'flex', flexDirection:'column'}} >
+                  {
+                    issuearray.map((isue, index)=>(
+                      <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}} >
+                        <Typography variant='body1'><AddIcon sx={{fontSize:'10px'}}/>{isue}</Typography>
+                        <IconButton onClick={() => handleclickremove()}><HighlightOffIcon sx={{color : "#000"}}/></IconButton>
+                      </Box>
+                    ))
+                  }
+                </Box>
+                <Button sx={{borderRadius : '20px', background: '#333', color : '#FFF!important', height:'24px'}} onClick={handlegetquotes}>Continue</Button>
+              </Grid>
+              : <></>
+            }  
 
-</Box>
+        </Box>
     )
 }
 

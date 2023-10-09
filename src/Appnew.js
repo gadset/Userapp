@@ -39,6 +39,9 @@ import StepperForm1 from "./Newdesign/Stepper1";
 import Orders from "./Newdesign/orders";
 import Profile from "./Newdesign/Profile";
 import {regSw, subscribe} from './helper';
+import Login from "./Newdesign/Login";
+import Username from "./Newdesign/Username";
+import CustomerQuotes from "./Newdesign/CustomerQuotes";
 
 export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -57,53 +60,62 @@ export default function App() {
   }
 
   useEffect(() => {
-//  subscribe();
 
       window.addEventListener('resize', handleWindowSizeChange);
       return () => {
           window.removeEventListener('resize', handleWindowSizeChange);
       }
   }, []);
+  
   const isMobile = width <= 768;
 
   return (
     <Router>
       <center>
-       <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px'}}> 
+       <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px', position: 'relative', zIndex: 999}}> 
        <Responsiveappbarnew/>
-        <ToastContainer/>
-        <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll'}}>
+        {/* <ToastContainer/> */}
+        <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll',position: 'relative', zIndex: 0}}>
         <Switch>
-         <Route exact path="/">
-            <Home1/>
-         </Route>
-         <Route path="/select">
-          <Selectdevice/>
-         </Route>
-         <Route path="/issuepage">
-          <SelectIssue/>
-         </Route>
-         <Route path='/preference'>
-          <Preference/>
-         </Route>
-         <Route path='/getquotes'>
-          <Getquotes/>
-         </Route>
-         <Route path='/numberinput'>
-          <Phonesignin/>
-         </Route>
-         <Route path='/stepper1'>
-          <StepperForm1/>
-         </Route>
-         <Route path='/paymentsuccess'>
-            <PaymentSuccessful/>
+          <Route exact path='/loginpage'>
+            <Login />
           </Route>
-          <Route path='/orders'>
-            <Orders/>
+          <Route exact path='/username'>
+            <Username />
           </Route>
-          <Route path="/profile">
-            <Profile/>
+          <Route exact path="/">
+              <Home1/>
           </Route>
+          <Route path="/select">
+            <Selectdevice/>
+          </Route>
+          <Route path="/issuepage">
+            <SelectIssue/>
+          </Route>
+          <Route path='/preference'>
+            <Preference/>
+          </Route>
+          <Route path='/getquotes'>
+            <Getquotes/>
+          </Route>
+          <Route path='/numberinput'>
+            <Phonesignin/>
+          </Route>
+          <Route path='/stepper1'>
+            <StepperForm1/>
+          </Route>
+          <Route path='/paymentsuccess'>
+              <PaymentSuccessful/>
+            </Route>
+            <Route path='/orders'>
+              <Orders/>
+            </Route>
+            <Route path="/profile">
+              <Profile/>
+            </Route>
+            <Route path="/customerquotes">
+              <CustomerQuotes />
+            </Route>
         </Switch>
         </Grid>
         <div style={{position: 'fixed', bottom: 0 ,width:'100%', left:0, right : 0}}>

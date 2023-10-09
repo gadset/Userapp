@@ -14,6 +14,7 @@ import { getAuth } from "firebase/auth";
 import { HashRouter } from 'react-router-dom/cjs/react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import { SubscribeUser } from './subscription';
+import { CookiesProvider } from 'react-cookie';
 
 const firebaseConfig = {
   // ...
@@ -30,20 +31,22 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+// export const apps = initializeApp(firebaseConfig);
 
 
 // Initialize Realtime Database and get a reference to the service
-const database = getDatabase(app);
-export const firestoredb = getFirestore(app);
-export const auth = getAuth(app);
+// const database = getDatabase(apps);
+// export const firestoredb = getFirestore(apps);
+// export const auth = getAuth(apps);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
      <ThemeProvider theme={theme}>
-     <App />
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
      </ThemeProvider>
      </Provider>
   </React.StrictMode>

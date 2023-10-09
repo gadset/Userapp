@@ -33,33 +33,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// function getSteps() {
-//   return ["Address", "Date & Time", "Order Summary", "Payment"];
-// }
-
-// function getStepContent(stepIndex) {
-//   switch (stepIndex) {
-//     case 0:
-//       return <AddressForm />;
-//     case 1:
-//       return <DateTimePickerPage />;
-//     case 2:
-//       return <PriceSummary />;
-//     case 3:
-//       return <Payment />;
-//     default:
-//       return "Unknown stepIndex";
-//   }
-// }
 
 export default function StepperForm1() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  ///const steps = getSteps();
   const location = useLocation();
-  //const model = location.model;
-  //const issue = location.issue;
-  //console.log(issue);
   const model1 = useSelector((state) => state.model.value)
   const issues1 = useSelector((state) => state.issues.value)
   const total = "19000";
@@ -174,21 +152,6 @@ export default function StepperForm1() {
               {getStepContent(activeStep)}
             </Typography>
             <div>
-              {/* <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.button}
-              >
-                Back
-              </Button> */}
-              {/* <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                className={classes.button}
-              >
-                Next
-              </Button> */}
             </div>
           </div>
         )}

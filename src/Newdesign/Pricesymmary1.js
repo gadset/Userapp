@@ -23,23 +23,20 @@ const TableCell = withStyles({
 })(MuiTableCell);
 
 export default function PriceSummary1({handlenextpage, delivery}){
-  const model1 = useSelector((state) => state.model.value)
+
   const issues1 = useSelector((state) => state.issues.value)
   console.log(issues1);
   const address1  = useSelector((state) => state.address.value)
   console.log(address1);
   const date1 = useSelector((state)=> state.date.value);
   console.log(date1);
-  const mobile = useSelector((state) => state.mobile.value);
-  const image = useSelector((state)=>state.image.value);
-let partner = Object.assign({},useSelector((state)=> state.partner.value));
-const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
+  const device = localStorage.getItem('DeviceBook');
+  const model = localStorage.getItem('ModelBook');
+  console.log(device)
+  let partner = Object.assign({},useSelector((state)=> state.partner.value));
+  const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
   const history = useHistory();
   const dispatch = useDispatch();
- // console.log(address1);
- const [width, setWidth] = useState(window.innerWidth);
- //const isMobile = width <= 768;
- const isMobile = true;
   const [isChecked, setIsChecked] = useState(false);
   const [isChecked1, setIsChecked1] = useState(false);
 
@@ -91,7 +88,7 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
     return(
         <Grid container spacing={2} sx={{width:'100%', display:'flex', flexDirection:'column', padding:'8px', marginLeft: '16px', marginTop : '8px',textAlign:'left', alignItems:'start'}}>
   
-        <Typography variant="body1" sx={{marginLeft : 0}} >Device : {model1}</Typography>
+        <Typography variant="body1" sx={{marginLeft : 0}} >Device : {device} {model}</Typography>
         <Typography variant="h5" sx={{marginLeft : 0}} >Selected Issues:</Typography>
         {
           issues1.map((iss) => (
@@ -109,10 +106,6 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
     </FormControl>
     <Typography variant="body2">Rs.1000</Typography>
     </Box>
-        {/* <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', mt:2}}>
-            <Typography variant="body1">Promo</Typography>
-            <Typography variant="body1">Apply</Typography>
-        </Box> */}
         <Divider sx={{width :'80%', marginTop:1}}/>
         <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', alignItems:'center'}}>
             <Typography variant="h4">Total Amount</Typography>
@@ -143,23 +136,7 @@ const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
       />
 
       <Divider sx={{width:'80%', m:2,}}/>
-      {/* <Box sx={{display:'flex',justifyContent:'start',flexDirection:'column',width:'100%'}}>
-<Typography variant="body1">Select payment method</Typography>
-      <FormControl>
-      <RadioGroup
-        value={value}
-        onChange={handleChange}
-      >
-        <FormControlLabel value="online" sx={{background: '#FBFBFB',
-        boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-borderRadius: '20px', marginTop:'4px', alignSelf:'center', width:'80%', mb:1}} control={<Radio />} label="Pay total online" />
-        <FormControlLabel sx={{background: '#FBFBFB',
-boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-borderRadius: '20px', marginTop:'4px',  alignSelf:'center', width:'80%', mb:1}} value="later" control={<Radio />} label="Pay Booking - 200" />
-      </RadioGroup>
-    </FormControl>
-    </Box> */}
-            <Button type="submit" color="primary" onClick={handlenextpage} disabled={!isChecked} >
+      <Button type="submit" color="primary" onClick={handlenextpage} disabled={!isChecked} >
         Book Service
       </Button>
         </Grid>

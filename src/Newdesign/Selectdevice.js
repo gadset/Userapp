@@ -24,12 +24,16 @@ import search from './Newlogos/search.svg';
 import { useTheme } from '@emotion/react';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { toast } from 'react-toastify';
+import { useCookies } from 'react-cookie';
 
 const StyledTextField = styled(TextField)`
-  background-color: #D9D9D9;
   border-radius: 5px;
+  border: none
 `;
+
+
 const Selectdevice = () => {
+    const [cookies] = useCookies(['access_token']);
     const history = useHistory();
     const [brand, setBrand]= useState("");
     const [devices, setDevices] = useState([]);
@@ -39,6 +43,8 @@ const Selectdevice = () => {
     const device = location.state.device;
     const theme = useTheme();
     const dispatch = useDispatch();
+
+
     const handleChangebrand = (e) => {
       let bra = e.target.value;
       console.log(bra);
@@ -55,7 +61,6 @@ const Selectdevice = () => {
               console.log("No data available");
             }
           }).catch((error) => {
-           // console.error(error);
            toast.error("some error occured");
           });
       }
@@ -72,25 +77,26 @@ const Selectdevice = () => {
         {"name" : "nothing" , "logo" : nothing},
         {"name" : "onePlus", "logo" : oneplus },
         {"name" : "oppo", "logo" : oppo},
-          {"name" : "poco", "logo" : poco},
-          {"name" : "realme" , "logo" : realme },
-          {"name" : "samsung", "logo" :samsung },
-          {"name" : "vivo", "logo" :vivo },
-
+        {"name" : "poco", "logo" : poco},
+        {"name" : "realme" , "logo" : realme },
+        {"name" : "samsung", "logo" :samsung },
+        {"name" : "vivo", "logo" :vivo },
     ]
 
     const handleDeviceSelected = () =>{
       dispatch(setModelValue(phone));
       dispatch(setdeviceValue(brand));
-      if(localStorage.getItem("verified")!=='yes'){
-        history.push('/numberinput');
-      }
-      else{
-        dispatch(setMobileValue(localStorage.getItem('phonenumber')));
-        dispatch(setUserIdValue(localStorage.getItem('gadsetid')));
-        history.push({
-          pathname : '/issuepage',
-        })
+      localStorage.setItem('device', brand);
+      localStorage.setItem('model', phone);
+      localStorage.setItem('LoginToNavbar', 1);
+
+      console.log(cookies.access_token)
+      if ( cookies.access_token === 'undefined' || cookies.access_token === null || cookies.access_token === '') {
+          history.push('/loginpage');
+      } else {
+          history.push({
+              pathname: '/issuepage',
+          });
       }
     }
     
@@ -98,63 +104,47 @@ const Selectdevice = () => {
         <Grid container sx={{display:'flex', justifyContent:'center', textAlign:'left', marginTop:'10px'}}>
           {
             device === 'Mobile' ? <>
-             <Grid item sx={{width:'95%'}}>
+              <Grid item sx={{width:'95%'}}>
                 <Typography variant='h4'>Select Brand</Typography>
-            <StyledTextField
-            hiddenLabel
-            size="small"
-          select
-          placeholder="Search your brand"
-          fullWidth
-          value={brand}
-          onChange={(e) => handleChangebrand(e)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end">
-                <img src={search} alt='searchbox'/>
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}>
-            {
-                data1.map((brand1) => (
-                    <MenuItem key={brand1.name} value={brand1.name}>
-                        {brand1.name}
-                    </MenuItem>
-                ))
-            }
+                  <StyledTextField
+                    hiddenLabel
+                    size="small"
+                    select
+                    placeholder="Search your brand"
+                    fullWidth
+                    value={brand}
+                    onChange={(e) => handleChangebrand(e)}
+                  >
+                    {
+                        data1.map((brand1) => (
+                            <MenuItem key={brand1.name} value={brand1.name}>
+                                {brand1.name}
+                            </MenuItem>
+                        ))
+                    }
+                  </StyledTextField>
+              </Grid>
 
-            </StyledTextField>
-            </Grid>
-            <Grid item item sx={{width:'95%', marginTop: theme.spacing(2)}}>
-            <Typography variant='h4'>Select Device</Typography>
-            <StyledTextField
-           hiddenLabel
-           size="small"
-          select
-          placeholder="Search your device"
-          fullWidth
-          value={phone}
-          onChange={(e)=>setPhone(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end">
-                <img src={search} alt='searchbox'/>
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}>
-            {
-                devices.map((brand1) => (
-                    <MenuItem key={brand1} value={brand1}>
-                        {brand1}
-                    </MenuItem>
-                ))
-            }
 
-            </StyledTextField>
+              <Grid item sx={{width:'95%', marginTop: theme.spacing(2)}}>
+                <Typography variant='h4'>Select Device</Typography>
+                <StyledTextField
+                  hiddenLabel
+                  size="small"
+                  select
+                  placeholder="Search your device"
+                  fullWidth
+                  value={phone}
+                  onChange={(e)=>setPhone(e.target.value)}
+                >
+                  {
+                      devices.map((brand1) => (
+                          <MenuItem key={brand1} value={brand1}>
+                              {brand1}
+                          </MenuItem>
+                      ))
+                  }
+                </StyledTextField>
             </Grid>
         
 
@@ -163,45 +153,48 @@ const Selectdevice = () => {
             :
             <>
                 <Grid item sx={{width:'95%'}}>
-                <Typography variant='h4'>Select Brand</Typography>
-            <StyledTextField
-            hiddenLabel
-            size="small"
-          placeholder="Search your brand"
-          fullWidth
-          value={brand}
-          onChange={(e) => handleChangebrand(e)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end">
-                <img src={search} alt='searchbox'/>
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}></StyledTextField>
-          </Grid>
+                  <Typography variant='h4'>Select Brand</Typography>
+                  <StyledTextField
+                    hiddenLabel
+                    size="small"
+                    placeholder="Search your brand"
+                    fullWidth
+                    value={brand}
+                    onChange={(e) => handleChangebrand(e)}
+                    // InputProps={{
+                    //   endAdornment: (
+                    //     <InputAdornment position="end">
+                    //       <IconButton edge="end">
+                    //       <img src={search} alt='searchbox'/>
+                    //       </IconButton>
+                    //     </InputAdornment>
+                    //   ),
+                    // }}
+                  >
+                  </StyledTextField>
+                </Grid>
           
-          <Grid item item sx={{width:'95%', marginTop: theme.spacing(2)}}>
+          <Grid item sx={{width:'95%', marginTop: theme.spacing(2)}}>
             <Typography variant='h4'>Select Device</Typography>
             <StyledTextField
-           hiddenLabel
-           size="small"
-          placeholder="Search your device"
-          fullWidth
-          value={phone}
-          onChange={(e)=>setPhone(e.target.value)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end">
-                <img src={search} alt='searchbox'/>
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}>
+              hiddenLabel
+              size="small"
+              placeholder="Search your device"
+              fullWidth
+              value={phone}
+              onChange={(e)=>setPhone(e.target.value)}
+              // InputProps={{
+              //   endAdornment: (
+              //     <InputAdornment position="end">
+              //       <IconButton edge="end">
+              //       <img src={search} alt='searchbox'/>
+              //       </IconButton>
+              //     </InputAdornment>
+              //   ),
+              // }}
+            >
             </StyledTextField>
-            </Grid></>
+          </Grid></>
 
           }
            
