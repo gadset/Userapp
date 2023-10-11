@@ -1,7 +1,10 @@
 import { useDispatch } from "react-redux"
 import { setImageValue } from "./reduxstore";
+import axios from "axios";
 
 const convertedVapidKey = urlBase64ToUint8Array("BMQOKdrpuYRNgI3wXtDoQstTJEt1rnO9w6b9KM3MnJek8V4DH72OYNYoACbpveEVg_1snYmI8EZIdJV_5qjfMo4")
+
+const user = localStorage.getItem('User');
 
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - base64String.length % 4) % 4)
@@ -17,10 +20,9 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray
 }
 
-function sendSubscription(subscription) {
-  return fetch(`${process.env.REACT_APP_BACKEND}message/subscribe`, {
-    method: 'POST',
-    body: JSON.stringify(subscription),
+async function sendSubscription(subscription) {
+  console.log(subscription);
+  return await axios.post(`${process.env.REACT_APP_BACKEND}message/subscribe`, {subscription, user},{
     headers: {
       'Content-Type': 'application/json'
     }

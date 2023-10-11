@@ -149,14 +149,15 @@ const Getquotes = () => {
             <Grid container spacing={3} sx={{ marginTop:'10px',width:'98%',paddingBottom: '70px'}} >
                 {
                     lenght >0 ?
-                    data.reverse().quotesbypartner.map((partner)=> (
+                    data.quotesbypartner.map((partner)=> (
                     <Box className={classes.boxstyles}>
                         <Box className={classes.subbox1}>
                             <Typography variant='body1'>PartnerId : {partner.partnerid}</Typography>
                             <Typography variant='body1'>Warranty : {partner.warranty}</Typography>
                             <Typography variant='body1'>Service : {partner.service}</Typography>
                             <FormControl>
-                                <FormControlLabel control={<Checkbox sx={{padding:'0px', marginLeft:'8px'}} />} label={<><Typography variant='body1'>Normal :  {partner.amount}</Typography></>}/>
+                                {/* <FormControlLabel control={<Checkbox sx={{padding:'0px', marginLeft:'8px'}} />} label={<><Typography variant='body1'>Normal :  {partner.amount}</Typography></>}/> */}
+                                <Typography variant='body1'>Normal :  {partner.amount}</Typography>
                             </FormControl>
                         </Box>
                  

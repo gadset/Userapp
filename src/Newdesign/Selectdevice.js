@@ -3,21 +3,9 @@ import { styled } from '@mui/system';
 import { TextField, IconButton, Box } from '@mui/material';
 import {InputAdornment} from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import React from 'react';
-import SearchComponent from './Searchcomponent';
-import apple from '../logos/apple.svg';
-import mi from '../logos/mi.svg';
-import motorola from '../logos/motorola.svg';
-import nothing from '../logos/nothing.svg';
-import oneplus from '../logos/oneplus.svg';
-import oppo from '../logos/oppo.svg';
-import poco from '../logos/poco.svg';
-import realme from '../logos/realme.svg';
-import samsung from '../logos/samsung.svg';
-import vivo from '../logos/vivo.svg';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { useState } from 'react';
-import { getDatabase, ref, child, get } from "firebase/database";
 import { setMobileValue, setModelValue, setUserIdValue, setdeviceValue } from '../reduxstore';
 import { useDispatch } from 'react-redux';
 import search from './Newlogos/search.svg';
@@ -25,6 +13,7 @@ import { useTheme } from '@emotion/react';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { toast } from 'react-toastify';
 import { useCookies } from 'react-cookie';
+import axios from 'axios';
 
 const StyledTextField = styled(TextField)`
   border-radius: 5px;
@@ -37,32 +26,32 @@ const Selectdevice = () => {
     const history = useHistory();
     const [brand, setBrand]= useState("");
     const [devices, setDevices] = useState([]);
-    const [devicearray, setDevicearr]= useState([]);
+    const [data1, setdata1] = useState([]);
     const [phone,setPhone] = useState('');
     const location = useLocation();
-    const device = location.state.device;
     const theme = useTheme();
     const dispatch = useDispatch();
 
+    const width = 500;
 
-    const handleChangebrand = (e) => {
+
+    const handleChangebrand = async(e) => {
       let bra = e.target.value;
       console.log(bra);
       setBrand(bra);
       try{
-        const dbRef = ref(getDatabase());
-        get(child(dbRef, bra)).then((snapshot) => { 
-          if (snapshot.exists()) {
-            setDevices(snapshot.val());    
-            console.log(snapshot.val());
-            setDevicearr(Object.keys(snapshot.val()))  ;        //console.log(data)
-              console.log(snapshot.val());
-            } else {
-              console.log("No data available");
+        const response = await axios.get(
+          `https://parseapi.back4app.com/classes/Cellphonedataset_Dataset_Cell_Phones_Model_Brand?limit=8346&keys=Brand,Model&where={"Brand":"${bra}"}`,
+          {
+            headers: {
+              'X-Parse-Application-Id': '8DqRF1XoWp8wGKjNlOanRTNPm4LIH6aLdg0Sxqu5', // This is your app's application id
+              'X-Parse-REST-API-Key': 'YhU35J5XJPyAZjfmstAD8CrWU0UrKY3cudWsJNic', // This is your app's REST API key
             }
-          }).catch((error) => {
-           toast.error("some error occured");
-          });
+          }
+        );
+        const data = response.data.results; // Here you have the data that you need
+        console.log(data);
+        setDevices(data);
       }
       catch{
         toast.error("some error occured");
@@ -70,18 +59,24 @@ const Selectdevice = () => {
      
     }
     
-    const data1 = [
-        {"name" : "apple" , "logo" : apple},
-        {"name" : "xiaomi", "logo" :mi },
-        {"name" : "motorola", "logo" :motorola },
-        {"name" : "nothing" , "logo" : nothing},
-        {"name" : "onePlus", "logo" : oneplus },
-        {"name" : "oppo", "logo" : oppo},
-        {"name" : "poco", "logo" : poco},
-        {"name" : "realme" , "logo" : realme },
-        {"name" : "samsung", "logo" :samsung },
-        {"name" : "vivo", "logo" :vivo },
-    ]
+
+    useEffect(() => {
+      const GetData = async() => {
+        const response = await axios.get(
+          'https://parseapi.back4app.com/classes/Cellphonedataset_Cell_Phone_Models_By_Brand?count=1&limit=108',
+          {
+            headers: {
+              'X-Parse-Application-Id': '8DqRF1XoWp8wGKjNlOanRTNPm4LIH6aLdg0Sxqu5', // This is your app's application id
+              'X-Parse-REST-API-Key': 'YhU35J5XJPyAZjfmstAD8CrWU0UrKY3cudWsJNic', // This is your app's REST API key
+            }
+          }
+        ); 
+        const data = await response.data.results; 
+        console.log(data);
+        setdata1(data);
+      }
+      GetData();
+    }, [])
 
     const handleDeviceSelected = () =>{
       dispatch(setModelValue(phone));
@@ -103,7 +98,7 @@ const Selectdevice = () => {
     return(
         <Grid container sx={{display:'flex', justifyContent:'center', textAlign:'left', marginTop:'10px'}}>
           {
-            device === 'Mobile' ? <>
+            width === 500 ? <>
               <Grid item sx={{width:'95%'}}>
                 <Typography variant='h4'>Select Brand</Typography>
                   <StyledTextField
@@ -117,8 +112,8 @@ const Selectdevice = () => {
                   >
                     {
                         data1.map((brand1) => (
-                            <MenuItem key={brand1.name} value={brand1.name}>
-                                {brand1.name}
+                            <MenuItem key={brand1.objectId} value={brand1.Cell_Phone_Brand}>
+                                {brand1.Cell_Phone_Brand}
                             </MenuItem>
                         ))
                     }
@@ -139,8 +134,8 @@ const Selectdevice = () => {
                 >
                   {
                       devices.map((brand1) => (
-                          <MenuItem key={brand1} value={brand1}>
-                              {brand1}
+                          <MenuItem key={brand1.Model} value={brand1.Model}>
+                              {brand1.Model}
                           </MenuItem>
                       ))
                   }

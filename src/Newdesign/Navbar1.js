@@ -129,21 +129,6 @@ useEffect(() => {
         <Toolbar disableGutters >
           <Grid container style={{ display:'flex', flexDirection:'row', justifyContent:'space-between',alignItems:'center', }}>
             <Grid item>
-          {/* <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,  
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >  </Typography> */}
              <Typography variant="h4" style={{
                color: '#000',
                fontFamily: 'Cinzel Decorative',
@@ -201,11 +186,6 @@ useEffect(() => {
   <IconButton onClick={() => handleCloseNavMenu('')} sx={{position:'absolute', right:'10px', top :'10px'}}>
     <HighlightOffIcon sx={{color:theme.palette.primary.main}}/>
   </IconButton>
-              {/* {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-             // ))} */}
                <MenuItem key='home' sx={{marginTop:'30px'}} onClick={() => handleCloseNavMenu('/')}>
                 <HomeIcon/>
                   <Typography textAlign="center" variant='body1' style={{margin:'8px'}}>Home</Typography>
@@ -218,7 +198,7 @@ useEffect(() => {
                 <GradingOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Orders</Typography>
                 </MenuItem>
-                <MenuItem key='saved' onClick={() => handleCloseNavMenu('/')}>
+                <MenuItem key='saved' onClick={() => handleCloseNavMenu('/bids')}>
                 <HomeOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >saved</Typography>
                 </MenuItem>

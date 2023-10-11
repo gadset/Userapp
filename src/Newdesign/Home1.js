@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -32,6 +32,7 @@ import banner from './Newlogos/gadset_banner.png';
 import circle from './Newlogos/circle.svg';
 import {regSw, subscribe} from '../helper';
 import { useCookies } from 'react-cookie';
+import axios from "axios";
 
 
 const useStyles = makeStyles({
@@ -66,17 +67,17 @@ const useStyles = makeStyles({
     flexWrap : 'nowrap',
     flexShrink : '0',
     animation: '$scroll 10s linear infinite', 
-    minWidth: '100%',// Adjust the duration (10s) as per your preference
+    minWidth: '100%',
     "&:hover": {
       animationPlayState: 'paused'
     }
   },
   '@keyframes scroll': {
     '0%': {
-      transform: 'translateX(0)',
+      transform: 'translateX(0%)',
     },
     '100%': {
-      transform: 'translateX(-190%)', // Adjust the percentage (-100%) to control the scroll distance
+      transform: 'translateX(-171%)', // Adjust the percentage (-100%) to control the scroll distance
     },
   },
 });
@@ -85,10 +86,27 @@ const Home1 = () => {
   const theme = useTheme();
   const classes = useStyles();
   const history = useHistory();
+  const [data, setdata] = useState([]);
   const [cookies] = useCookies(['access_token']);
   
-  console.log(cookies)
-  console.log(cookies.access_token)
+  useEffect(() => {
+    const GetData = async() => {
+      const res = await axios.get('http://localhost:8003/users/bidstodisplay')
+      const data = res.data.data;
+      console.log(data);
+      console.log(res.data);
+      setdata(data);
+
+      const resi = await axios.get('http://localhost:8003/users/u', {
+        headers: {
+          'x-token': cookies.access_token
+        }
+      })
+      // console.log(resi.data.user);
+      localStorage.setItem('User',resi.data.user );
+    }
+    GetData();
+  }, [10000])
 
   const bidscompleted = [
     { name: "iphone-13", amount: "4500" },
@@ -127,6 +145,7 @@ const Home1 = () => {
     history.push({pathname : "/select",
   state : {device : devi }});
   };
+
   return (
     <Grid sx={{display:'flex', justifyContent:'center', flexDirection:'column', alignItems:'center', marginBottom:'50px', marginTop:'5px'}}>
       <img src={banner} alt="gadset_banner" style={{width:'95%'}}/>
@@ -134,19 +153,21 @@ const Home1 = () => {
         <Typography variant="h4">Recent Bids</Typography>
         <Box
           className={classes.scrollBox}
-  
         >
-          {bidscompleted.map((bid, index) => (
-<Box key={index} sx={{display:'flex', flexDirection:'row', justifyContent:'center',   borderTop: '1px solid #333',
-            borderBottom: '1px solid #333',
-            background: '#F9F9F9',}}    >
-  <img src={circle} alt='circle dot'></img>
-  <Box sx={{display:'flex', flexDirection:'column', marginLeft:theme.spacing(1),alignItems:'start'}}>
-    <Typography variant="body1">{bid.name} - screen</Typography>
-    <Typography variant="body1">Replacement - Rs.{bid.amount}</Typography>
-  </Box>
-</Box>
-            
+          {data.map((bid, index) => (
+            <Box key={index} sx={{display:'flex', flexDirection:'row', justifyContent:'center',   borderTop: '1px solid #333',
+                        borderBottom: '1px solid #333',
+                        background: '#F9F9F9',}}    >
+              <img src={circle} alt='circle dot' style={{marginLeft: '5px', padding: '0 0 0 5px'}}></img>
+              <Box sx={{display:'flex', flexDirection:'column', marginLeft:theme.spacing(1),alignItems:'start'}}>
+                <Typography variant="body1">{bid.device} {bid.model}</Typography>
+                {
+                  bid.issu.map((issue) => (
+                    <Typography variant="body1">{issue}</Typography>
+                  ))
+                }
+              </Box>
+            </Box>    
           ))}
         </Box>
       </Grid>

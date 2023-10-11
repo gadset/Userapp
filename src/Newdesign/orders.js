@@ -19,7 +19,7 @@ const ButtonStyled = styled(Button) `
 
 export default function Orders(){
   const [data, setdata ] = useState([]);
-  const [show, setshow] = useState(true);
+  const [show, setshow] = useState(false);
 
   useEffect(()=>{
  fetch(process.env.REACT_APP_BACKEND+ 'users/getorder', {

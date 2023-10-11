@@ -90,10 +90,10 @@ function Login() {
                 if(data.message === 'new user') {
                     history.push({pathname : "/username"})
                 }
-                if(loginInfo == 0) {
-                    history.push({pathname : "/"})
-                } else {
+                if(loginInfo == 1) {
                     history.push({pathname : "/issuepage"})
+                } else {
+                    history.push({pathname : "/"})
                 }
             } catch(error) {
                 console.error(error)

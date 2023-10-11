@@ -42,25 +42,23 @@ import {regSw, subscribe} from './helper';
 import Login from "./Newdesign/Login";
 import Username from "./Newdesign/Username";
 import CustomerQuotes from "./Newdesign/CustomerQuotes";
+import {messaging} from './firebase.config'
+import { getToken } from "firebase/messaging";
+import axios from "axios";
+import { useCookies } from 'react-cookie';
 
 export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
+  const [cookies] = useCookies(['access_token']);
 
   function handleWindowSizeChange() {
       setWidth(window.innerWidth);
   }
-  async function subscribe(){
-    try {
-      const serviceWorkerReg = await regSw ();
-      await subscribe (serviceWorkerReg);
-      console.log("good");
-    } catch (error) {
-      console.log (error);
-    }
-  }
+  
+
+
 
   useEffect(() => {
-
       window.addEventListener('resize', handleWindowSizeChange);
       return () => {
           window.removeEventListener('resize', handleWindowSizeChange);
@@ -77,6 +75,9 @@ export default function App() {
         {/* <ToastContainer/> */}
         <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll',position: 'relative', zIndex: 0}}>
         <Switch>
+          <Route exact path='/bids'>
+            <CustomerQuotes />
+          </Route>
           <Route exact path='/loginpage'>
             <Login />
           </Route>

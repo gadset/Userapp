@@ -27,7 +27,7 @@ function CustomerQuotes() {
         // e.preventDefault();
         localStorage.setItem('DeviceId', data1._id);
         // console.log(data1.device);
-        localStorage.setItem('DeviceBook', JSON.stringify(data1.device));
+        localStorage.setItem('DeviceBook', data1.device);
         localStorage.setItem('ModelBook', data1.model);
         window.location.href= '/getquotes'
     }
@@ -41,7 +41,7 @@ function CustomerQuotes() {
                 </Typography>
             </Grid>
 
-            <Grid container sx={{width: '100%', display: 'flex', flexDirection: 'column'}}>
+            <Grid container sx={{width: '100%', display: 'flex', flexDirection: 'column', paddingBottom: '60px'}}>
                 {
                     data.map((data1, index) => (
                         <Grid key={index} container onClick={() => handleOpenQuotes(data1)} sx={{backgroundColor: '#DEDEDE', width: '90%', margin: '10px auto', padding: '10px 15px', border: '1px solid #A19F9F', borderRadius: '5px', cursor: 'pointer'}}>
