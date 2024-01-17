@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux"
 import { setImageValue } from "./reduxstore";
 import axios from "axios";
 
-const convertedVapidKey = urlBase64ToUint8Array("BMQOKdrpuYRNgI3wXtDoQstTJEt1rnO9w6b9KM3MnJek8V4DH72OYNYoACbpveEVg_1snYmI8EZIdJV_5qjfMo4")
+const convertedVapidKey = urlBase64ToUint8Array("BJs-1rAgTehzrIsAOwkqNHiwhTNB2Iudrw5XRzAen9wFcpcvICqVzpxwA7vwdyT1grGNOaKW9kdconwzjnHWWIg")
 
 const user = localStorage.getItem('User');
 

@@ -68,7 +68,7 @@ const BlackStarIcon = () => {
 };
 
 const Getquotes = () => {
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(true);
     const [lenght, setlenght] = useState('');
     const [cookies] = useCookies(['access_token']);
     const [data, setdata] = useState([]);
@@ -83,23 +83,49 @@ const Getquotes = () => {
 
 
     useEffect(() => {
-        const id = localStorage.getItem("DeviceId");
-        console.log(id);
-        const Getdata = async() => {
-            const res = await axios.post('http://localhost:8003/users/getbidsfordevice', {id}, {
-                headers: {
-                    'x-token': cookies.access_token
-                }
-            })
-            const dat = res.data.data;
-            console.log(res.data);
-            setdata(dat);
-            setlenght(dat.quotesbypartner.length);
-            console.log(dat.quotesbypartner.length)
-        }
-        Getdata();
-    }, [])
+		const id = localStorage.getItem("quoteid");
+		var eventSourceInitDict = {headers: {'x-token': cookies.access_token,}};
+	   const eventSource = new EventSource(process.env.REACT_APP_BACKEND + `users/quotesdashboard?id=${id}&endpoint=${subscription?.endpoint}&pdh=${subscription?.keys?.p256dh}&auth=${subscription?.keys?.auth}`,
+	   {token : cookies.access_token},
+	    {
+		headers: {'x-token': cookies.access_token,}
+	    }
+	   );
 
+        eventSource.onopen = () => {
+          console.log('Connection to SSE established.');
+        };
+
+        eventSource.onmessage = (event) => {
+          setdata(JSON.parse(event.data));
+          console.log("fetched", event.data);
+         setShow(false);
+        };
+
+        eventSource.onerror = (error) => {
+          console.error('Error with SSE:', error);
+        };
+
+        return () => {
+          eventSource.close();
+        };
+    //     const id = localStorage.getItem("quoteid");
+    //     console.log(id);
+    //     const Getdata = async() => {
+    //         const res = await axios.get(process.env.REACT_APP_BACKEND + `users/quotesdashboard?id=${id}`, 
+	// 		{
+    //             headers: {
+    //                 'x-token': cookies.access_token,
+    //             }
+    //         })
+    //         const dat = res.data.data;
+    //         console.log("why iam not printing anythin", res);
+    //         setdata(dat);
+    //         setlenght(dat.quotesbypartner.length);
+    //         console.log(dat.quotesbypartner.length)
+    //     }
+    //     Getdata();
+    }, [])
 
     const quotedata = 2;
 
@@ -115,13 +141,6 @@ const Getquotes = () => {
 
     return(
 <Box sx={{marginTop:'8px', display:'flex', flexDirection : 'column', alignItems:'center', justifyContent:'center'}}>
-    {
-        show ? <Box sx={{display:'flex',flexDirection : 'column', alignItems:'center', justifyContent:'center' }}>
-              <Typography variant='h4' sx={{marginTop :'4px'}}>Getting Quote's</Typography>
-            <img src={loader} style={{width: '174px',
-            height: '174px'}} alt="loading gif"/>
-        </Box>
-        : 
         <Box sx={{width:'90%', display:'flex', justifyContent:'center', flexDirection :'column', alignItems:'center',marginTop:theme.spacing(1)}}>
             <Typography variant='h4'>Quote's</Typography>
             <Card sx={{  borderRadius: '5px',
@@ -148,8 +167,8 @@ const Getquotes = () => {
 
             <Grid container spacing={3} sx={{ marginTop:'10px',width:'98%',paddingBottom: '70px'}} >
                 {
-                    lenght >0 ?
-                    data.quotesbypartner.map((partner)=> (
+					data.length > 0 ?
+                    data?.map((partner)=> (
                     <Box className={classes.boxstyles}>
                         <Box className={classes.subbox1}>
                             <Typography variant='body1'>PartnerId : {partner.partnerid}</Typography>
@@ -197,7 +216,6 @@ const Getquotes = () => {
           
         </Grid>
         </Box>
-    }
 </Box>
     )
 }

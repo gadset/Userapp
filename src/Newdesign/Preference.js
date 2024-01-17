@@ -55,7 +55,7 @@ const Preference = () => {
           uid = user.uid;
         }
 
-        const res = await axios.post('http://localhost:8003/users/sendquote', {
+        const res = await axios.post(process.env.REACT_APP_BACKEND + 'users/sendquote', {
             "device" :device,
             "model" : model,
             "issue" : issuearray,
@@ -69,10 +69,11 @@ const Preference = () => {
         })
 
         const data = res.data;
-        console.log(data)
+        console.log("this is response data", data)
+		localStorage.setItem('quoteid', data.id);
         // setloading(false);
         // toast.success(data.message)
-        history.push({pathname : "/orders"})
+        history.push({pathname : "/getquotes"})
       }
 
 

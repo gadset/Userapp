@@ -1,7 +1,7 @@
 {
   "name": "gadsetfront",
   "version": "0.1.0",
-  "homepage": "http://tamboola.in/",
+  "homepage": "",
   "private": true,
   "dependencies": {
     "@capacitor/android": "4.7.3",

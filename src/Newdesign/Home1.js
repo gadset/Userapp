@@ -10,7 +10,7 @@ import {
   CardMedia,
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import SearchComponent from "./Searchcomponent";
+import SearchComponent from "./Misc/Searchcomponent";
 import apple from "../logos/apple.svg";
 import mi from "../logos/mi.svg";
 import motorola from "../logos/motorola.svg";
@@ -91,13 +91,13 @@ const Home1 = () => {
   
   useEffect(() => {
     const GetData = async() => {
-      const res = await axios.get('http://localhost:8003/users/bidstodisplay')
+      const res = await axios.get(process.env.REACT_APP_BACKEND + 'users/bidstodisplay')
       const data = res.data.data;
       console.log(data);
       console.log(res.data);
       setdata(data);
 
-      const resi = await axios.get('http://localhost:8003/users/u', {
+      const resi = await axios.get(process.env.REACT_APP_BACKEND + 'users/u', {
         headers: {
           'x-token': cookies.access_token
         }

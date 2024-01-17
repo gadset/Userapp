@@ -85,8 +85,7 @@ const Selectdevice = () => {
       localStorage.setItem('model', phone);
       localStorage.setItem('LoginToNavbar', 1);
 
-      console.log(cookies.access_token)
-      if ( cookies.access_token === 'undefined' || cookies.access_token === null || cookies.access_token === '') {
+      if ( cookies.access_token === undefined || cookies.access_token === null || cookies.access_token === '') {
           history.push('/loginpage');
       } else {
           history.push({
@@ -104,19 +103,13 @@ const Selectdevice = () => {
                   <StyledTextField
                     hiddenLabel
                     size="small"
-                    select
+                    // select
                     placeholder="Search your brand"
                     fullWidth
                     value={brand}
                     onChange={(e) => handleChangebrand(e)}
                   >
-                    {
-                        data1.map((brand1) => (
-                            <MenuItem key={brand1.objectId} value={brand1.Cell_Phone_Brand}>
-                                {brand1.Cell_Phone_Brand}
-                            </MenuItem>
-                        ))
-                    }
+                  
                   </StyledTextField>
               </Grid>
 
@@ -126,19 +119,12 @@ const Selectdevice = () => {
                 <StyledTextField
                   hiddenLabel
                   size="small"
-                  select
+                //   select
                   placeholder="Search your device"
                   fullWidth
                   value={phone}
                   onChange={(e)=>setPhone(e.target.value)}
                 >
-                  {
-                      devices.map((brand1) => (
-                          <MenuItem key={brand1.Model} value={brand1.Model}>
-                              {brand1.Model}
-                          </MenuItem>
-                      ))
-                  }
                 </StyledTextField>
             </Grid>
         

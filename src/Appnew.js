@@ -27,21 +27,21 @@ import { Grid } from "@mui/material";
 import FixedNavigation from "./Navbar/BottomNav";
 import Bidding from "./components/Biddingpage";
 import { ToastContainer } from "react-toastify";
-import Responsiveappbarnew from "./Newdesign/Navbar1";
-import FixedNavigation1 from "./Newdesign/BottomNav1";
+import Responsiveappbarnew from "./Newdesign/Navbar/Navbar1";
+import FixedNavigation1 from "./Newdesign/Navbar/BottomNav1";
 import Home1 from "./Newdesign/Home1";
 import Selectdevice from "./Newdesign/Selectdevice";
 import SelectIssue from "./Newdesign/Selectissue";
 import Preference from "./Newdesign/Preference";
 import Getquotes from "./Newdesign/Getquotes";
-import Phonesignin from "./Newdesign/Phonesignin1";
-import StepperForm1 from "./Newdesign/Stepper1";
-import Orders from "./Newdesign/orders";
-import Profile from "./Newdesign/Profile";
+import Phonesignin from "./Newdesign/Login/Phonesignin1";
+import StepperForm1 from "./Newdesign/Stepper/Stepper1";
+import Orders from "./Newdesign/Navbar/orders";
+import Profile from "./Newdesign/Navbar/Profile";
 import {regSw, subscribe} from './helper';
-import Login from "./Newdesign/Login";
-import Username from "./Newdesign/Username";
-import CustomerQuotes from "./Newdesign/CustomerQuotes";
+import Login from "./Newdesign/Login/Login";
+import Username from "./Newdesign/Misc/Username";
+import CustomerQuotes from "./Newdesign/Misc/CustomerQuotes";
 import {messaging} from './firebase.config'
 import { getToken } from "firebase/messaging";
 import axios from "axios";
@@ -75,44 +75,58 @@ export default function App() {
         {/* <ToastContainer/> */}
         <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll',position: 'relative', zIndex: 0}}>
         <Switch>
-          <Route exact path='/bids'>
-            <CustomerQuotes />
-          </Route>
-          <Route exact path='/loginpage'>
-            <Login />
-          </Route>
-          <Route exact path='/username'>
-            <Username />
-          </Route>
-          <Route exact path="/">
+		  <Route exact path="/">
               <Home1/>
           </Route>
+
           <Route path="/select">
             <Selectdevice/>
           </Route>
-          <Route path="/issuepage">
+
+		  <Route exact path='/loginpage'>
+            <Login />
+          </Route>
+
+		  <Route path="/issuepage">
             <SelectIssue/>
           </Route>
-          <Route path='/preference'>
+
+		  <Route path='/preference'>
             <Preference/>
           </Route>
-          <Route path='/getquotes'>
+
+			<Route path='/getquotes'>
             <Getquotes/>
           </Route>
+
+		  <Route path='/stepper1'>
+            <StepperForm1/>
+          </Route>
+
+		  <Route path='/orders'>
+              <Orders/>
+            </Route>
+
+        <Route path="/profile">
+              <Profile/>
+        </Route>
+
+		{/* unwanted as of now */}
+
+          <Route exact path='/bids'>
+            <CustomerQuotes />
+          </Route>
+          
+          <Route exact path='/username'>
+            <Username />
+          </Route>
+          
           <Route path='/numberinput'>
             <Phonesignin/>
           </Route>
-          <Route path='/stepper1'>
-            <StepperForm1/>
-          </Route>
+          
           <Route path='/paymentsuccess'>
               <PaymentSuccessful/>
-            </Route>
-            <Route path='/orders'>
-              <Orders/>
-            </Route>
-            <Route path="/profile">
-              <Profile/>
             </Route>
             <Route path="/customerquotes">
               <CustomerQuotes />
