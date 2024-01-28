@@ -1,6 +1,6 @@
-import { Box, Grid , Typography, TextField } from '@mui/material'
-import React, { useState, useEffect } from 'react'
-import './Login.css'
+import { Box, Grid , Typography, TextField } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import '../Login/Login.css';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useHistory } from "react-router-dom";
@@ -17,7 +17,8 @@ function Username() {
         try {
             const res = await axios.post(process.env.REACT_APP_BACKEND + 'users/addname', {name}, {
                 headers: {
-                    'x-token': cookies.access_token
+                    // 'x-token': cookies.access_token
+					'x-token' : localStorage.getItem('access_token'),
                 }
             })
             const data = res.data;

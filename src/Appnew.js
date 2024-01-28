@@ -26,7 +26,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { Grid } from "@mui/material";
 import FixedNavigation from "./Navbar/BottomNav";
 import Bidding from "./components/Biddingpage";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Responsiveappbarnew from "./Newdesign/Navbar/Navbar1";
 import FixedNavigation1 from "./Newdesign/Navbar/BottomNav1";
 import Home1 from "./Newdesign/Home1";
@@ -46,33 +46,108 @@ import {messaging} from './firebase.config'
 import { getToken } from "firebase/messaging";
 import axios from "axios";
 import { useCookies } from 'react-cookie';
+import { useDispatch } from "react-redux";
+import { setUserIdValue } from "./reduxstore";
+import { Start } from "@mui/icons-material";
+import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import PrivacyPolicy from "./Newdesign/TermsPolicies/PrivacyDoc";
+import TermsAndConditions from "./Newdesign/TermsPolicies/TermsConditions";
+import FAQs from "./Newdesign/TermsPolicies/FAQs";
+import UpdateAddress from "./Newdesign/Navbar/UpdateDetails";
+  import ReactGA from 'react-ga';
+  const TRACKING_ID = "G-RM48RFTVRV"; // OUR_TRACKING_ID
+  ReactGA.initialize(TRACKING_ID);
+
 
 export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
   const [cookies] = useCookies(['access_token']);
+  const dispatch = useDispatch();
+  const [verified, setVerified] = useState(true);
 
   function handleWindowSizeChange() {
       setWidth(window.innerWidth);
   }
   
-
-
-
+  console.log("app js running");
   useEffect(() => {
       window.addEventListener('resize', handleWindowSizeChange);
       return () => {
           window.removeEventListener('resize', handleWindowSizeChange);
       }
   }, []);
+
+  useEffect(() => {
+	async function start(){
+	if(localStorage.getItem('access_token') ){
+		fetch(process.env.REACT_APP_BACKEND + 'users/u', {
+			method: 'GET',
+          headers: {
+			 'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+            'x-token': localStorage.getItem('access_token') 
+          }
+        }).then(response => response.json())
+		.then(json => {dispatch(setUserIdValue(json.user)) ; 
+		localStorage.setItem('userid', json.user)})
+		.catch((error) => {
+			console.log(error);
+			toast.error("Login again");
+			setVerified(false);
+		})
+	}
+	};
+	start();	
+  }, [localStorage.getItem('access_token') ])
   
   const isMobile = width <= 768;
+
+  if(!localStorage.getItem('access_token') && verified){
+	return (
+		 <Router>
+      <center>
+       <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px', position: 'relative', zIndex: 999}}> 
+       <Responsiveappbarnew/>
+        <ToastContainer/>
+        <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll',position: 'relative', zIndex: 0}}>
+        <Switch>
+		  <Route exact path="/">
+              <Home1/>
+          </Route>
+          <Route path="/select">
+            <Selectdevice/>
+          </Route>
+		  <Route exact path='/loginpage'>
+            <Login />
+          </Route>
+		  <Route exact path='/privacy'>
+            <PrivacyPolicy />
+          </Route>
+		  <Route  path='/faq'>
+            <FAQs />
+          </Route>
+		  <Route path="/terms"><TermsAndConditions/></Route>
+
+		  <Redirect to ='/loginpage'/>
+        </Switch>
+        </Grid>
+        <div style={{position: 'fixed', bottom: 0 ,width:'100%', left:0, right : 0}}>
+<FixedNavigation1/>
+</div>
+      </Grid> 
+      </center>
+     
+   </Router>
+
+	)
+  }
 
   return (
     <Router>
       <center>
        <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px', position: 'relative', zIndex: 999}}> 
        <Responsiveappbarnew/>
-        {/* <ToastContainer/> */}
+        <ToastContainer/>
         <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll',position: 'relative', zIndex: 0}}>
         <Switch>
 		  <Route exact path="/">
@@ -106,11 +181,21 @@ export default function App() {
 		  <Route path='/orders'>
               <Orders/>
             </Route>
-
+ <Route  path='/faq'>
+            <FAQs />
+          </Route>
         <Route path="/profile">
               <Profile/>
         </Route>
 
+		  <Route  path='/privacy'>
+            <PrivacyPolicy />
+          </Route>
+<Route  path='/updateDetails'>
+            <UpdateAddress />
+          </Route>
+		  
+<Route path="/terms"><TermsAndConditions/></Route>
 		{/* unwanted as of now */}
 
           <Route exact path='/bids'>

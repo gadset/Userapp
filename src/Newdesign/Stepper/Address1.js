@@ -11,6 +11,11 @@ import { setAddressValue } from "../../reduxstore";
 import { useTheme } from "@emotion/react";
 import Geocode from "react-geocode";
 import { toast } from "react-toastify";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { useCookies } from "react-cookie";
+import Autocomplete from '@mui/material/Autocomplete';
+
 
 const AddressForm1 = ({onData, handlenextpage}) => {
   const [name, setName] = useState("");
@@ -20,8 +25,36 @@ const AddressForm1 = ({onData, handlenextpage}) => {
   const [landmark, setLandmark] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [addressName, setAddressName] = useState("");
+  const [address, setAddress]=useState([]);
   const dispatch = useDispatch();
   const theme = useTheme()
+  const [saveAddress, setSaveAddress] = useState(false);
+  const [cookies] = useCookies([]);
+const [selectedAddress, setSelectedAddress] = useState(null);
+
+
+    useEffect(() => {
+
+	async function start () {
+	   fetch(process.env.REACT_APP_BACKEND+'users/getAddresses', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+		// 'x-token' : cookies.access_token
+		'x-token' : localStorage.getItem('access_token'),
+      }, 
+    }).then(response => response.json())
+    .then(json => {
+setMobileNumber(json?.phone)
+setName(json?.name);
+setAddress(json?.addresses);
+	});  
+		
+	}
+	start();
+  }, [])
 
 const [place, setplace] = useState("")
   const handleSubmit = (e) => {
@@ -37,41 +70,88 @@ const [place, setplace] = useState("")
     });
   };
 
+    const handleCheckboxChange = (event) => {
+    setSaveAddress(event.target.checked);
+  };
+
   const [latlng, setlatlng] = useState({});
   Geocode.setApiKey("AIzaSyBKIByYCgUyIZYIfQUchm4ZVtowK0tvfhg");
-  console.log(localStorage.getItem('DeviceId'))
-  const storedData = localStorage.getItem('DeviceBook');
-  console.log(storedData)
+//   console.log(localStorage.getItem('DeviceId'))
+//   const storedData = localStorage.getItem('DeviceBook');
+//   console.log(storedData)
+
+  const handleAddressChange = (event, newValue) => {
+    setSelectedAddress(newValue);
+  };
+
+  const handleAddNewAddress = () => {
+setSelectedAddress(null);
+setSaveAddress(true);
+
+  }
 
   const handlenext = () => {
-    const data = {
-      'name' : name,
-      'phone': mobileNumber,
-      'pin' : pinCode,
-      'flat' : flatNumber,
-      'landmark' : landmark,
-      'city' : city,
-      'state' : state,
-      'place' : place
-    };
+    // const data = {
+    //   'name' : name,
+    //   'phone': mobileNumber,
+    //   'pin' : pinCode,
+    //   'flat' : flatNumber,
+    //   'landmark' : landmark,
+    //   'city' : city,
+    //   'state' : state,
+    //   'place' : place
+    // };
+	if(saveAddress) {
+	const address = `${flatNumber}, ${landmark}, ${city}, ${state}, ${pinCode}` ; 
     fetch(process.env.REACT_APP_BACKEND+'users/setaddress', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+		// 'x-token' : cookies.access_token
+		'x-token' : localStorage.getItem('access_token'),
+
       }, 
       body : JSON.stringify({
-        id : localStorage.getItem('gadsetid'),
-        address : data
+        addressName : addressName, 
+		newAddress : address,
+		name
       }),   
     }).then(response => response.json())
-    .then(json => {handlenextpage();});  
-    onData(data)
-    dispatch(setAddressValue(data));
+    .then(json => {
+		    dispatch(setAddressValue(address));
+		handlenextpage();});  
+	}
+	else{
+		dispatch(setAddressValue(selectedAddress));
+		handlenextpage();
+	}
+	
     
   }
   return (
-    <Grid container sx={{ marginLeft: 0, width: "100%", display:'flex', flexDirection:'column', alignItems:'center' ,marginBottom: '30px',}}>
+	<>
+	{ address?.length > 0 && !saveAddress ?
+	<div style={{width : '95%', margin : 'auto'}}>
+	<Autocomplete
+        options={address}
+        getOptionLabel={(option) => `${option.name}: ${option.address?.city}`}
+        value={selectedAddress}
+        onChange={handleAddressChange}
+        renderInput={(params) => <TextField {...params} label="Select Address" />}
+      />
+	  <div style={{marginTop : '12px', display : 'flex', justifyContent : 'space-between'}}>
+	  	<Button onClick={handleAddNewAddress} variant="contained">
+        Add New Address
+      	</Button>
+
+      	<Button onClick={handlenext} variant="contained">
+        Submit
+      	</Button>
+	  	  </div>
+	  </div>
+	  :
+	  <Grid container sx={{ marginLeft: 0, width: "100%", display:'flex', flexDirection:'column', alignItems:'center' ,marginBottom: '30px',}}>
       <Typography variant="h5" sx={{m:1}}>
        Add your Address
       </Typography>
@@ -89,18 +169,19 @@ const [place, setplace] = useState("")
               onChange={(e) => setName(e.target.value)}
             />
        
-          <Typography variant="h4">Mobile Number<sup>*</sup></Typography>
+          {/* <Typography variant="h4">Mobile Number<sup>*</sup></Typography>
             <TextField
               variant="outlined"
               required
               fullWidth
+			  disabled
               size='small'
               id="mobileNumber"
               name="mobileNumber"
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
             />
-            
+             */}
             <Typography variant="h4">Address<sup>*</sup></Typography>
 
             <Grid container sx={{display:'flex', flexDirection : 'row', mt:1, mb:1, justifyContent:'space-between'}}>
@@ -171,14 +252,39 @@ const [place, setplace] = useState("")
               onChange={(e) => setLandmark(e.target.value)}
             />
 
+
+		<TextField
+          size='small'
+          variant="outlined"
+          fullWidth
+		  placeholder="Enter name of this address"
+		  style={{marginTop : '8px'}}
+          value={addressName}
+          onChange={(e) => setAddressName(e.target.value)}
+        />
+
+
         </Grid>
+
         
-        <Box sx={{ mt: 1, textAlign: "right" }}>
+
+        
+        <div style={{marginTop : '12px', display : 'flex', justifyContent : 'space-between'}}>
+			{
+				address?.length > 0 && (
+<Button type="submit" onClick={() => setSaveAddress(false)} >
+            Select from existing
+          </Button>
+				)
+			}
+		
           <Button type="submit" onClick={handlenext} >
             Add address
           </Button>
-        </Box>
+        </div>
     </Grid>
+	}
+	</>
   );
 };
 

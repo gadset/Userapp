@@ -1,6 +1,6 @@
 import { Grid, Typography, Paper, Divider, Stack, Chip, Checkbox, FormControlLabel, Box, Button } from "@mui/material";
 import React, { useState } from "react";
-import logo from '../Images/logo.svg';
+import logo from '../../Images/logo.svg';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,8 +13,8 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import address from '../Images/summarypage/address.svg';
-import calendar from '../Images/summarypage/calendar.svg';
+import address from '../../Images/summarypage/address.svg';
+import calendar from '../../Images/summarypage/calendar.svg';
 
 
 export default function Payment1(){

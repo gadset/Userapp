@@ -18,7 +18,12 @@ async function subscribe (serviceWorkerReg) {
         applicationServerKey: 'BMQOKdrpuYRNgI3wXtDoQstTJEt1rnO9w6b9KM3MnJek8V4DH72OYNYoACbpveEVg_1snYmI8EZIdJV_5qjfMo4',
       });
     }
-    axios.post('http://localhost:8003/subscribe', subscription);
+	try{
+		axios.post(`${process.env.REACT_APP_BACKEND}message/subscribe`, subscription);
+	}
+	catch(error){
+		console.log(error);
+	}
   }
 
   export {regSw, subscribe};

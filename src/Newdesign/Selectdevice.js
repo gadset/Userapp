@@ -35,63 +35,63 @@ const Selectdevice = () => {
     const width = 500;
 
 
-    const handleChangebrand = async(e) => {
-      let bra = e.target.value;
-      console.log(bra);
-      setBrand(bra);
-      try{
-        const response = await axios.get(
-          `https://parseapi.back4app.com/classes/Cellphonedataset_Dataset_Cell_Phones_Model_Brand?limit=8346&keys=Brand,Model&where={"Brand":"${bra}"}`,
-          {
-            headers: {
-              'X-Parse-Application-Id': '8DqRF1XoWp8wGKjNlOanRTNPm4LIH6aLdg0Sxqu5', // This is your app's application id
-              'X-Parse-REST-API-Key': 'YhU35J5XJPyAZjfmstAD8CrWU0UrKY3cudWsJNic', // This is your app's REST API key
-            }
-          }
-        );
-        const data = response.data.results; // Here you have the data that you need
-        console.log(data);
-        setDevices(data);
-      }
-      catch{
-        toast.error("some error occured");
-      }
+    // const handleChangebrand = async(e) => {
+    //   let bra = e.target.value;
+    //   console.log(bra);
+    //   setBrand(bra);
+    //   try{
+    //     const response = await axios.get(
+    //       `https://parseapi.back4app.com/classes/Cellphonedataset_Dataset_Cell_Phones_Model_Brand?limit=8346&keys=Brand,Model&where={"Brand":"${bra}"}`,
+    //       {
+    //         headers: {
+    //           'X-Parse-Application-Id': '8DqRF1XoWp8wGKjNlOanRTNPm4LIH6aLdg0Sxqu5', // This is your app's application id
+    //           'X-Parse-REST-API-Key': 'YhU35J5XJPyAZjfmstAD8CrWU0UrKY3cudWsJNic', // This is your app's REST API key
+    //         }
+    //       }
+    //     );
+    //     const data = response.data.results; // Here you have the data that you need
+    //     console.log(data);
+    //     setDevices(data);
+    //   }
+    //   catch{
+    //     toast.error("some error occured");
+    //   }
      
-    }
+    // }
     
 
-    useEffect(() => {
-      const GetData = async() => {
-        const response = await axios.get(
-          'https://parseapi.back4app.com/classes/Cellphonedataset_Cell_Phone_Models_By_Brand?count=1&limit=108',
-          {
-            headers: {
-              'X-Parse-Application-Id': '8DqRF1XoWp8wGKjNlOanRTNPm4LIH6aLdg0Sxqu5', // This is your app's application id
-              'X-Parse-REST-API-Key': 'YhU35J5XJPyAZjfmstAD8CrWU0UrKY3cudWsJNic', // This is your app's REST API key
-            }
-          }
-        ); 
-        const data = await response.data.results; 
-        console.log(data);
-        setdata1(data);
-      }
-      GetData();
-    }, [])
+    // useEffect(() => {
+    //   const GetData = async() => {
+    //     const response = await axios.get(
+    //       'https://parseapi.back4app.com/classes/Cellphonedataset_Cell_Phone_Models_By_Brand?count=1&limit=108',
+    //       {
+    //         headers: {
+    //           'X-Parse-Application-Id': '8DqRF1XoWp8wGKjNlOanRTNPm4LIH6aLdg0Sxqu5', // This is your app's application id
+    //           'X-Parse-REST-API-Key': 'YhU35J5XJPyAZjfmstAD8CrWU0UrKY3cudWsJNic', // This is your app's REST API key
+    //         }
+    //       }
+    //     ); 
+    //     const data = await response.data.results; 
+    //     console.log(data);
+    //     setdata1(data);
+    //   }
+    //   GetData();
+    // }, [])
 
     const handleDeviceSelected = () =>{
       dispatch(setModelValue(phone));
       dispatch(setdeviceValue(brand));
-      localStorage.setItem('device', brand);
-      localStorage.setItem('model', phone);
-      localStorage.setItem('LoginToNavbar', 1);
+    //   localStorage.setItem('device', brand);
+    //   localStorage.setItem('model', phone);
+    //   localStorage.setItem('LoginToNavbar', 1);
 
-      if ( cookies.access_token === undefined || cookies.access_token === null || cookies.access_token === '') {
-          history.push('/loginpage');
-      } else {
+    //   if ( cookies.access_token === undefined || cookies.access_token === null || cookies.access_token === '') {
+    //       history.push('/loginpage');
+    //   } else {
           history.push({
               pathname: '/issuepage',
           });
-      }
+    //   } 	
     }
     
     return(
@@ -99,15 +99,15 @@ const Selectdevice = () => {
           {
             width === 500 ? <>
               <Grid item sx={{width:'95%'}}>
-                <Typography variant='h4'>Select Brand</Typography>
+                <Typography variant='h4'>Brand Name </Typography>
                   <StyledTextField
                     hiddenLabel
                     size="small"
                     // select
-                    placeholder="Search your brand"
+                    placeholder="brand name of your device (Ex.Apple)"
                     fullWidth
                     value={brand}
-                    onChange={(e) => handleChangebrand(e)}
+                    onChange={(e) => setBrand(e.target.value)}
                   >
                   
                   </StyledTextField>
@@ -115,12 +115,12 @@ const Selectdevice = () => {
 
 
               <Grid item sx={{width:'95%', marginTop: theme.spacing(2)}}>
-                <Typography variant='h4'>Select Device</Typography>
+                <Typography variant='h4'>Model Number</Typography>
                 <StyledTextField
                   hiddenLabel
                   size="small"
                 //   select
-                  placeholder="Search your device"
+                  placeholder="model name of your device (Ex.iphone 6s)"
                   fullWidth
                   value={phone}
                   onChange={(e)=>setPhone(e.target.value)}
@@ -134,14 +134,14 @@ const Selectdevice = () => {
             :
             <>
                 <Grid item sx={{width:'95%'}}>
-                  <Typography variant='h4'>Select Brand</Typography>
+                  <Typography variant='h4'>Brand Name</Typography>
                   <StyledTextField
                     hiddenLabel
                     size="small"
-                    placeholder="Search your brand"
+                    placeholder="brand name of your device (Ex.Apple)"
                     fullWidth
                     value={brand}
-                    onChange={(e) => handleChangebrand(e)}
+                    onChange={(e) => setBrand(e.target.value)}
                     // InputProps={{
                     //   endAdornment: (
                     //     <InputAdornment position="end">
@@ -156,11 +156,11 @@ const Selectdevice = () => {
                 </Grid>
           
           <Grid item sx={{width:'95%', marginTop: theme.spacing(2)}}>
-            <Typography variant='h4'>Select Device</Typography>
+            <Typography variant='h4'>Model Name</Typography>
             <StyledTextField
               hiddenLabel
               size="small"
-              placeholder="Search your device"
+              placeholder="model name of your device (Ex.iphone 6s)"
               fullWidth
               value={phone}
               onChange={(e)=>setPhone(e.target.value)}

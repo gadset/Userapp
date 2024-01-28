@@ -4,7 +4,7 @@ import { TextField, IconButton, Box } from '@mui/material';
 import {InputAdornment} from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { makeStyles, withStyles } from "@mui/styles";
-import search from './Newlogos/search.svg';
+import search from '../Newlogos/search.svg';
 import { useTheme } from '@emotion/react';
 const useStyles = makeStyles((theme) => ({
   textField: {

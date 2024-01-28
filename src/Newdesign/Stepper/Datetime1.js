@@ -36,7 +36,7 @@ const DateTime1 = ({onDate, handlenextpage}) => {
 
   const handlenext = () => {
     const data = {
-      'date' : selectedDate.getDate()+'/' + selectedDate.getMonth() + '/' +  selectedDate.getFullYear() ,
+      'date' : selectedDate.getDate()+'/' + selectedDate.getMonth() + 1 + '/' +  selectedDate.getFullYear() ,
       'time' : selectedTime,
     }
     onDate(data);

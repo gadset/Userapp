@@ -12,7 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import logo from '../Images/logo.svg';
+import logo from '../../Images/logo.svg';
 import SearchIcon from '@mui/icons-material/Search';
 import Paper from '@mui/material/Paper';
 import { styled, alpha } from '@mui/material/styles';
@@ -122,6 +122,8 @@ useEffect(() => {
  const isMobile = true;
 
 
+
+
   return (
     <Box spacing={2} container style={{display : 'flex', flexGrow:1, flexDirection : isMobile ? "column" : "row", alignItems:'center', justifyContent:'flex-start',zIndex: '999'}}>
     <AppBar position="static" color="transparent" sx={{marginTop:0,boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',}}>
@@ -202,11 +204,11 @@ useEffect(() => {
                 <HomeOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >saved</Typography>
                 </MenuItem>
-                <MenuItem key='terms' onClick={() => handleCloseNavMenu('/')}>
+                <MenuItem key='terms' onClick={() => handleCloseNavMenu('/privacy')}>
                 <PlaylistAddCheckOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Terms, Policies and licenses</Typography>
                 </MenuItem>
-                <MenuItem key='faq' onClick={() => handleCloseNavMenu('/')}>
+                <MenuItem key='faq' onClick={() => handleCloseNavMenu('/faq')}>
                 <QuizOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Browse FAQ's</Typography>
                 </MenuItem>

@@ -11,16 +11,17 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import { useCookies } from 'react-cookie';
 import Login from '../Login/Login';
 import { useEffect, useState } from 'react';
-
+import HomeIcon from '@mui/icons-material/Home';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 
 export default function FixedNavigation1() {
     const theme = useTheme();
     const [cookies, removeCookie] = useCookies(['access_token']);
     const [value, setValue] = useState(false);
     const [loginToNavbar, setLoginToNavbar] = useState(false);
-    
+    const history = useHistory();
     useEffect(() => {
-      if(cookies.access_token === 'undefined') {
+      if(localStorage.getItem('access_token') === 'undefined') {
           setValue(false)
       }else {
           setValue(true)
@@ -28,11 +29,11 @@ export default function FixedNavigation1() {
     })
 
     const handleWhatsappClick = () => {
-      window.location.href = 'https://wa.me/9620543935';
+      window.location.href = 'https://wa.me/919620543935';
     }
 
     const handleCallClick = () => {
-      window.location.href = 'tel:+918688749458';
+      window.location.href = 'tel:+919620543935';
     }
 
     const handleLogin = () => {
@@ -45,6 +46,9 @@ export default function FixedNavigation1() {
       window.location.href = '/profile'
     }
     
+	const handleHome = () => {
+		history.push('/')
+	}
 
     return (
         <Box sx={{ zIndex : 999, background : 'white', height:'54px' }}>
@@ -56,7 +60,7 @@ export default function FixedNavigation1() {
               {/* <a href="tel:+918688749458"> */}
                 <BottomNavigationAction onClick={handleCallClick} label="Call" icon={<WifiCalling3Icon sx={{color:theme.palette.primary.main}} />} />
               {/* </a> */}
-              <BottomNavigationAction label="Chat" icon={<ForumIcon sx={{color:theme.palette.primary.main}} />} />
+              {/* <BottomNavigationAction label="Chat" icon={<ForumIcon sx={{color:theme.palette.primary.main}} />} /> */}
 
 
               {/* <a href="https://wa.me/9620543935">  */}
@@ -64,7 +68,7 @@ export default function FixedNavigation1() {
               {/* </a> */}
 
               {/* <Link to='/profile'>   */}
-              <BottomNavigationAction onClick={value ? openProfile : handleLogin} label={value ? 'Profile' : 'Sign In'} icon={<AccountCircleOutlinedIcon sx={{color:theme.palette.primary.main}} />} /> 
+              <BottomNavigationAction label="Home" onClick={handleHome} icon={<HomeIcon sx={{color:theme.palette.primary.main}} />} /> 
               {/* </Link> */}
              
             </BottomNavigation>
