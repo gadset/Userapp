@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "homepage": "",
   "private": true,
-  "proxy": "https://backend.in.tamboola.in/",
   "dependencies": {
     "@capacitor/android": "4.7.3",
     "@capacitor/core": "^4.7.3",

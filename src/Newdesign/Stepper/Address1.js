@@ -90,6 +90,12 @@ setSaveAddress(true);
 
   }
 
+  const handleNext1 = () => {
+
+	dispatch(setAddressValue(selectedAddress?.address));
+	handlenextpage();
+  }
+
   const handlenext = () => {
     // const data = {
     //   'name' : name,
@@ -101,8 +107,8 @@ setSaveAddress(true);
     //   'state' : state,
     //   'place' : place
     // };
-	if(saveAddress) {
-	const address = `${flatNumber}, ${landmark}, ${city}, ${state}, ${pinCode}` ; 
+	// if(saveAddress) {
+	let address1 = `${flatNumber}, ${landmark}, ${city}, ${state}, ${pinCode}` ; 
     fetch(process.env.REACT_APP_BACKEND+'users/setaddress', {
       method: 'POST',
       headers: {
@@ -114,25 +120,28 @@ setSaveAddress(true);
       }, 
       body : JSON.stringify({
         addressName : addressName, 
-		newAddress : address,
+		newAddress : address1,
 		name
       }),   
     }).then(response => response.json())
     .then(json => {
-		    dispatch(setAddressValue(address));
+		dispatch(setAddressValue(address1));
 		handlenextpage();});  
-	}
-	else{
-		dispatch(setAddressValue(selectedAddress));
-		handlenextpage();
-	}
+	// }
+	// else{
+	// 	dispatch(setAddressValue(selectedAddress));
+	// 	handlenextpage();
+	// }
 	
     
   }
   return (
 	<>
 	{ address?.length > 0 && !saveAddress ?
-	<div style={{width : '95%', margin : 'auto'}}>
+	<div style={{width : '95%', margin : 'auto', marginTop : '16px'}}>
+		<Typography variant="h5" sx={{m:1}}>
+       Select from previous addresses
+      </Typography>
 	<Autocomplete
         options={address}
         getOptionLabel={(option) => `${option.name}: ${option.address?.city}`}
@@ -141,17 +150,17 @@ setSaveAddress(true);
         renderInput={(params) => <TextField {...params} label="Select Address" />}
       />
 	  <div style={{marginTop : '12px', display : 'flex', justifyContent : 'space-between'}}>
-	  	<Button onClick={handleAddNewAddress} variant="contained">
+	  	<Button onClick={handleAddNewAddress} >
         Add New Address
       	</Button>
 
-      	<Button onClick={handlenext} variant="contained">
+      	<Button onClick={handleNext1}>
         Submit
       	</Button>
 	  	  </div>
 	  </div>
 	  :
-	  <Grid container sx={{ marginLeft: 0, width: "100%", display:'flex', flexDirection:'column', alignItems:'center' ,marginBottom: '30px',}}>
+	  <Grid container sx={{ marginLeft: 0, width: "100%", display:'flex',marginTop : '16px', flexDirection:'column', alignItems:'center' ,marginBottom: '30px',}}>
       <Typography variant="h5" sx={{m:1}}>
        Add your Address
       </Typography>
@@ -272,13 +281,13 @@ setSaveAddress(true);
         <div style={{marginTop : '12px', display : 'flex', justifyContent : 'space-between'}}>
 			{
 				address?.length > 0 && (
-<Button type="submit" onClick={() => setSaveAddress(false)} >
+<Button  onClick={() => setSaveAddress(false)} >
             Select from existing
           </Button>
 				)
 			}
 		
-          <Button type="submit" onClick={handlenext} >
+          <Button  onClick={handlenext} >
             Add address
           </Button>
         </div>

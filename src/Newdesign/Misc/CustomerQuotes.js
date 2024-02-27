@@ -55,13 +55,13 @@ function CustomerQuotes() {
                     data?.map((data1, index) => (
                         <Grid key={index} container onClick={() => handleOpenQuotes(data1)} sx={{backgroundColor: '#DEDEDE', width: '90%', margin: '10px auto', padding: '10px 15px', border: '1px solid #A19F9F', borderRadius: '5px', cursor: 'pointer'}}>
                             <Grid item sx={{width: '95%', margin: 'auto', display: 'flex', flexDirection: 'column'}}>
-                                <Typography sx={{textAlign: 'left', fontSize: '14px', lineHeight: '16.42px', fontFamily: 'Work sans', color: '#000000'}} > Device : {data1.device} </Typography>
+                                <Typography sx={{textAlign: 'left', fontSize: '14px', lineHeight: '16.42px', fontFamily: 'Work sans', color: '#000000'}} > <strong> Device :</strong> {data1.device} </Typography>
                             </Grid>
                             <Grid item sx={{width: '95%', margin: 'auto', display: 'flex', flexDirection: 'column'}}>
-                                <Typography sx={{textAlign: 'left', fontSize: '14px', lineHeight: '16.42px', fontFamily: 'Work sans', color: '#000000'}} > Model : {data1.model} </Typography>
+                                <Typography sx={{textAlign: 'left', fontSize: '14px', lineHeight: '16.42px', fontFamily: 'Work sans', color: '#000000'}} > <strong> Model : </strong> {data1.model} </Typography>
                             </Grid>
                             <Grid item sx={{width: '95%', margin: 'auto', display: 'flex', flexDirection: 'row'}}>
-                                <Typography sx={{textAlign: 'left', fontSize: '14px', lineHeight: '16.42px', width: '70px', fontFamily: 'Work sans', color: '#000000'}} > Issue :    </Typography>
+                                <Typography sx={{textAlign: 'left', fontSize: '14px', lineHeight: '16.42px', width: '70px', fontFamily: 'Work sans', color: '#000000'}} > <strong>Issue :  </strong> </Typography>
                                 <Grid item sx={{width: '95%', margin: 'auto', display: 'flex', flexDirection: 'column'}}>
                                 {
                                     data1.issu.map((issue) => (

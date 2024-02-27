@@ -3,7 +3,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import React , {useState} from 'react';
+import React , {useState, useEffect} from 'react';
 import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,8 @@ import { useCookies } from 'react-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import { storage } from "../firebase.config";
 import { ref, uploadBytesResumable, getDownloadURL , uploadBytes} from "firebase/storage";
+import sendWhatsappMsg from './SendMessage/sendwhatsapp';
+import ReactGA from 'react-ga';
 
 const Preference = () => {
   const location = useLocation();
@@ -50,11 +52,16 @@ const Preference = () => {
         console.log(e.target.value)
       }
 
+	    useEffect(() => {
+    // Initialize Google Analytics with your tracking ID
+    ReactGA.initialize('G-RM48RFTVRV');
+  }, []);
+
 	  const handleChangeImage = (filevalue) => 
 	  {
 		console.log("filevalue", filevalue);
 
-	 const metadata = {
+	 	const metadata = {
   			contentType: 'image'
 		};
 	
@@ -91,6 +98,11 @@ uploadBytes(storageRef, filevalue).then((snapshot) => {
 
       const handlesendquote = async() => {
         // setloading(true);
+		ReactGA.event({
+      category: 'Button',
+      action: 'Click',
+      label: 'Lead Created',
+    });
 
 // Upload file and metadata to the object 'images/mountains.jpg'
 // Listen for state changes, errors, and completion of the upload.
@@ -115,6 +127,14 @@ uploadBytes(storageRef, filevalue).then((snapshot) => {
 		const data = res.data;
         console.log("this is response data", data)
 		localStorage.setItem('quoteid', data.id);
+		data?.partnernumber.forEach((partner) => {
+		sendWhatsappMsg({
+			templateParams : [`${device}`, `${model}`],
+			destination : `+91${partner}`,
+			campaignName : 'Customer Quote Add - Partner Notification'
+		})
+		})
+		history.push({pathname : "/getquotes",});
 		}
        catch(error){
 		setloading(false);
@@ -123,7 +143,6 @@ uploadBytes(storageRef, filevalue).then((snapshot) => {
 	   }
         // setloading(false);
         // toast.success(data.message) ;
-        history.push({pathname : "/getquotes",});
       }
 
 
@@ -182,6 +201,7 @@ uploadBytes(storageRef, filevalue).then((snapshot) => {
                 border: "none",
                 backgroundColor: "#D9D9D9",
                 margin: "5px auto",
+				marginLeft : '5px'
               }}
 			  type='textarea'
               placeholder="Current Condition of your phone"
@@ -192,7 +212,7 @@ uploadBytes(storageRef, filevalue).then((snapshot) => {
 
 	<Grid item >
 	<Typography variant='h4'>Upload Image of current Condition of your phone </Typography>
-		<input type="file" accept="image/*" style={{height : '41px'}} onChange={(e)=> handleChangeImage(e.target.files[0])}/>
+		<input type="file" accept="image/*" style={{height : '41px', marginTop : '12px', marginLeft : '5px'}} onChange={(e)=> handleChangeImage(e.target.files[0])}/>
 
 	</Grid>
 	 <ColorRing

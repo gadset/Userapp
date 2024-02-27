@@ -18,6 +18,7 @@ import calendar from '../../Images/summarypage/calendar.svg';
 import { toast } from "react-toastify";
 import { getYear } from "date-fns";
 import { useCookies } from "react-cookie";
+import sendWhatsappMsg from "../SendMessage/sendwhatsapp";
 
 export default function Paymentnew(){
   const model1 = useSelector((state) => state.model.value)
@@ -103,6 +104,18 @@ const number = localStorage['number'];
 				 .then((json) => 
 				{ if(json?.message === "saved succesfully") {
 					toast.success('Order Saved Successfully');
+					sendWhatsappMsg({
+		templateParams : [`${details?.deliverytype}`, `${details?.warranty}` , `${amounttotal}`],
+		destination : `+91${json?.customerphone}`,
+		campaignName : 'Order Succesfully Created - Customer'
+	})
+
+	sendWhatsappMsg({
+		templateParams : [`${details?.deliverytype}`, `${details?.warranty}` ,
+		 `${amounttotal}` , `${details?.quality}`],
+		destination : `+91${json?.partnerphone}`,
+		campaignName : 'Order Placed - Partner'
+	});
 					history.push('/orders');
 				 }
 				 else{
@@ -187,7 +200,7 @@ const number = localStorage['number'];
                 .then(json => {
                   toast(json['message']);
                   history.push({
-                    pathname : '/'
+                    pathname : '/thankyou'	
                   });
                 })
             },
@@ -203,8 +216,8 @@ const number = localStorage['number'];
     return(
         <Grid container sx={{display:'flex', flexDirection:'column', padding:'8px', width:'100%', justifyContent:'center', alignItems:'center',  textAlign:'start'}}>
         <Typography variant="h5">Payment</Typography>
-        <Typography variant="body2">Selected Device : {device}{model1} </Typography>
-        <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', alignItems:'center'}}>
+        <Typography variant="body2"> <strong>Selected Device :</strong> {device}{model1} </Typography>
+        <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%', alignItems:'center', marginTop:'12px'}}>
             <Typography variant="h4">Service cost</Typography>
             <Typography variant="body1">Rs. {amounttotal}</Typography>
         </Box>
@@ -218,10 +231,24 @@ const number = localStorage['number'];
             <Typography variant="body1">Rs. {amounttotal}</Typography>
         </Box>
         <Divider sx={{width :'80%', m:1}}/>
-        <Grid item spacing={1} sx={{display:'flex', flexDirection:'column',width:'100%'}}>
-      
-        <Box sx={{display:'flex',justifyContent:'start',flexDirection:'column',width:'100%',}}>
-<Typography variant="h4">Select payment method</Typography>
+		<Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%',alignItems:'center'}}>
+			 <Grid item spacing={1} sx={{display:'flex', flexDirection:'column',width:'100%'}}>
+			 <FormControl>
+      <RadioGroup
+        value={value}
+        onChange={handleChange}
+      >
+        <FormControlLabel value="online" sx={{background: '#FBFBFB',
+        boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
+        borderRadius: '20px', marginTop:'4px', alignSelf:'center', width:'100%', mb:1}} control={<Radio />} label="Pay After Service" />
+      </RadioGroup>
+    </FormControl>
+	</Grid>
+      </Box>	
+
+	 
+        {/* <Box sx={{display:'flex',justifyContent:'start',flexDirection:'column',width:'100%',}}>
+{/* <Typography variant="h4">Select payment method</Typography>
       <FormControl>
       <RadioGroup
         value={value}
@@ -232,14 +259,13 @@ const number = localStorage['number'];
         borderRadius: '20px', marginTop:'4px', alignSelf:'center', width:'80%', mb:1}} control={<Radio />} label="Pay After Service" />
         {/* <FormControlLabel sx={{background: '#FBFBFB',
         boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-        borderRadius: '20px', marginTop:'4px',  alignSelf:'center', width:'80%', mb:1}} value="later" control={<Radio />} label="Pay booking - 200" /> */}
+        borderRadius: '20px', marginTop:'4px',  alignSelf:'center', width:'80%', mb:1}} value="later" control={<Radio />} label="Pay booking - 200" />
       </RadioGroup>
     </FormControl>
-    </Box> 
+    </Box>  */}
 
             
-<Button variant="contained" onClick={saveorder} sx={{width:'200px', margintop :'10px', margin:'auto'}}>Pay Now</Button>
-</Grid>
+<Button onClick={saveorder} sx={{width:'200px', margintop :'10px', margin:'auto'}}>Confirm Order</Button>
 </Grid>
     )
 }

@@ -29,11 +29,11 @@ export default function FixedNavigation1() {
     })
 
     const handleWhatsappClick = () => {
-      window.location.href = 'https://wa.me/919620543935';
+      window.location.href = 'https://wa.me/+918069409279';
     }
 
     const handleCallClick = () => {
-      window.location.href = 'tel:+919620543935';
+      window.location.href = 'tel:+918069409279';
     }
 
     const handleLogin = () => {

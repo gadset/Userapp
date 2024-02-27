@@ -202,7 +202,7 @@ useEffect(() => {
                 </MenuItem>
                 <MenuItem key='saved' onClick={() => handleCloseNavMenu('/bids')}>
                 <HomeOutlinedIcon/>
-                <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >saved</Typography>
+                <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Quotes/Bids</Typography>
                 </MenuItem>
                 <MenuItem key='terms' onClick={() => handleCloseNavMenu('/privacy')}>
                 <PlaylistAddCheckOutlinedIcon/>
@@ -212,7 +212,11 @@ useEffect(() => {
                 <QuizOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Browse FAQ's</Typography>
                 </MenuItem>
-                <MenuItem sx={{marginTop :'24px'}}>
+				<MenuItem key='faq' onClick={() => handleCloseNavMenu('/whyus')}>
+                <QuizOutlinedIcon/>
+                <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Why Tamboola?</Typography>
+                </MenuItem>
+                {/* <MenuItem sx={{marginTop :'24px'}}>
                 <Stack direction='row' spacing={2}>
                   <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
               <IconButton>
@@ -233,7 +237,7 @@ useEffect(() => {
               <Typography style={{color:theme.palette.primary.main,fontSize : '14px',fontFamily:'Poppins', fontStyle:'normal', fontWeight :400, lineHeight:'21px'}}>YouTube</Typography>
               </Box>
             </Stack>
-                </MenuItem>
+                </MenuItem> */}
                 </Grid>
             </Menu>
           </Grid>

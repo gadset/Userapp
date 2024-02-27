@@ -55,6 +55,8 @@ import TermsAndConditions from "./Newdesign/TermsPolicies/TermsConditions";
 import FAQs from "./Newdesign/TermsPolicies/FAQs";
 import UpdateAddress from "./Newdesign/Navbar/UpdateDetails";
   import ReactGA from 'react-ga';
+import FeaturesList from "./Newdesign/TermsPolicies/WhyUs";
+import ThankYouPage from "./Newdesign/Stepper/ThankYou";
   const TRACKING_ID = "G-RM48RFTVRV"; // OUR_TRACKING_ID
   ReactGA.initialize(TRACKING_ID);
 
@@ -88,8 +90,19 @@ export default function App() {
             'x-token': localStorage.getItem('access_token') 
           }
         }).then(response => response.json())
-		.then(json => {dispatch(setUserIdValue(json.user)) ; 
-		localStorage.setItem('userid', json.user)})
+		.then(json => {
+
+			if(json?.isTokenExpired === true){
+				localStorage.removeItem('access_token');
+			setVerified(false);
+
+			}
+			
+			else{
+				dispatch(setUserIdValue(json.user)) ; 
+		localStorage.setItem('userid', json.user)
+			}
+			})
 		.catch((error) => {
 			console.log(error);
 			toast.error("Login again");
@@ -127,6 +140,8 @@ export default function App() {
             <FAQs />
           </Route>
 		  <Route path="/terms"><TermsAndConditions/></Route>
+		  <Route path="/whyus"><FeaturesList/></Route>
+		  <Route path='/thankyou'><ThankYouPage/></Route>
 
 		  <Redirect to ='/loginpage'/>
         </Switch>
@@ -148,7 +163,7 @@ export default function App() {
        <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px', position: 'relative', zIndex: 999}}> 
        <Responsiveappbarnew/>
         <ToastContainer/>
-        <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll',position: 'relative', zIndex: 0}}>
+        <Grid style={{width:'100%', height:'80vh', overflowY : 'scroll',position: 'relative', zIndex: 0, marginBottom : '30px'}}>
         <Switch>
 		  <Route exact path="/">
               <Home1/>
@@ -165,6 +180,8 @@ export default function App() {
 		  <Route path="/issuepage">
             <SelectIssue/>
           </Route>
+
+		<Route path='/thankyou'><ThankYouPage/></Route>
 
 		  <Route path='/preference'>
             <Preference/>
@@ -196,6 +213,7 @@ export default function App() {
           </Route>
 		  
 <Route path="/terms"><TermsAndConditions/></Route>
+ <Route path="/whyus"><FeaturesList/></Route>
 		{/* unwanted as of now */}
 
           <Route exact path='/bids'>

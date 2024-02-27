@@ -6,11 +6,12 @@ import axios from "axios";
 import { auth } from "../../firebase.config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import OtpInput from "otp-input-react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { SubscribeUser } from "../../subscription";
 import { useDispatch } from "react-redux";
 import { setUserIdValue } from "../../reduxstore";
+
 function Login() {
   const history = useHistory();
   const [number, setNumber] = useState("");
@@ -20,6 +21,7 @@ function Login() {
   const [message, setMessage] = useState(true);
   const loginInfo = localStorage.getItem("LoginToNavbar");
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const [_, setCookies] = useCookies(["access_token"]);
 
@@ -95,7 +97,12 @@ function Login() {
 		  dispatch(setUserIdValue(data?.id));
 		  localStorage.setItem('userid', data?.id);
 		  SubscribeUser({partnerid : data?.id});
-			history.go(-1);
+		  if(location.state.from === 'selectDevice'){
+			history.push('/issuepage')
+		  }
+		  else{
+history.go(-1);
+		  }		
         } catch (error) {
           console.error(error);
         }

@@ -92,7 +92,7 @@ const DateTime1 = ({onDate, handlenextpage}) => {
             </LocalizationProvider>
         </Grid>
         <Box sx={{ mt: 2, textAlign: "right" }}>
-          <Button type="submit" onClick={handlenext} >
+          <Button onClick={handlenext} >
             Submit
           </Button>
         </Box>

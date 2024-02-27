@@ -85,13 +85,17 @@ const Selectdevice = () => {
     //   localStorage.setItem('model', phone);
     //   localStorage.setItem('LoginToNavbar', 1);
 
-    //   if ( cookies.access_token === undefined || cookies.access_token === null || cookies.access_token === '') {
-    //       history.push('/loginpage');
-    //   } else {
+      if ( cookies.access_token === undefined || cookies.access_token === null || cookies.access_token === '') {
+          history.push({
+			pathname : '/loginpage',
+		   state : {
+			from : 'selectDevice',
+		   }});
+      } else {
           history.push({
               pathname: '/issuepage',
           });
-    //   } 	
+      } 	
     }
     
     return(
@@ -178,9 +182,13 @@ const Selectdevice = () => {
           </Grid></>
 
           }
-           
-          
-          <Button sx={{padding:'4px', width:'150px', marginTop: theme.spacing(2)}} onClick={() => handleDeviceSelected()}>Submit</Button>
+{
+	phone.length > 0 && brand.length > 0 ?
+          <Button sx={{marginTop : '12px'}} onClick={() => handleDeviceSelected()}>Submit</Button>
+ :
+           <Button disabled sx={{marginTop : '12px'}} onClick={() => handleDeviceSelected()}>Submit</Button>
+}
+		      
         </Grid>
     )
 }

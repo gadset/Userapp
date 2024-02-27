@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Button,
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SearchComponent from "./Misc/Searchcomponent";
@@ -34,6 +35,9 @@ import { regSw, subscribe } from "../helper";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { toast } from "react-toastify";
+import FAQs from "./TermsPolicies/FAQs";
+import FeaturesList from "./TermsPolicies/WhyUs";
+import InfiniteScrollComponent from "./Home/slidingComponent";
 
 const useStyles = makeStyles({
   card1: {
@@ -156,8 +160,9 @@ const Home1 = () => {
     >
       <img src={banner} alt="gadset_banner" style={{ width: "95%" }} />
       <Grid item sx={{ width: "95%", overflowX: "hidden" }}>
-        <Typography variant="h4">Recent Bids</Typography>
-        <Box className={classes.scrollBox}>
+        <Typography variant="h4">Issues We Solve</Typography>
+		<InfiniteScrollComponent/>
+        {/* <Box className={classes.scrollBox}>
           {
 			data?.length > 0 ? 
 		  data?.map((bid, index) => (
@@ -198,7 +203,7 @@ const Home1 = () => {
 		  :
 		  <Typography>No recent bids to show</Typography>
 		}
-        </Box>
+        </Box> */}
       </Grid>
 
       <Typography variant="h5">Select Device</Typography>
@@ -245,7 +250,8 @@ const Home1 = () => {
           </Grid>
         ))}
       </Grid>
-      <Grid></Grid>
+      <FAQs/>
+	  <FeaturesList/>
     </Grid>
   );
 };

@@ -47,6 +47,12 @@ lineHeight: 'normal',
       fontWeight: '500',
       margin : '4px',
      },
+	  h6 : {
+      fontFamily : "Work Sans",
+      fontSize : '17px',
+      fontWeight: '400',
+      margin : '4px',
+     },
      h5 : {
       color: '#000',
 fontFamily:'Work Sans',

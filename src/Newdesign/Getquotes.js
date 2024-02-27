@@ -262,10 +262,12 @@ const Getquotes = () => {
                    </Box>
                 ))
 
-                    :    <>
-                            <Typography variant="body1">No quotes to show here</Typography>
-                        </>
-                
+                    :   
+					<Box sx={{display:'flex',flexDirection : 'column', alignItems:'center', justifyContent:'center', margin:'auto' }}>
+   <img src={loader} style={{width: '174px',
+height: '174px'}} alt="loading gif"/>
+	<Typography>Your quotes are on their way</Typography>
+        			</Box>     
             }
           
 		   <Modal open={open} onClose={() => setOpen(false)}>
@@ -303,7 +305,8 @@ const Getquotes = () => {
         </FormControl>
 			)
 		}
-        <Button onClick={handlebookpartner} color="primary">
+        <Button onClick={handlebookpartner} 
+		>
           Confirm
         </Button>
       </Box>

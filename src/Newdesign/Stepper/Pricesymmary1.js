@@ -84,8 +84,8 @@ export default function PriceSummary1({handlenextpage, delivery}){
     return(
         <Grid container spacing={2} sx={{width:'100%', display:'flex', flexDirection:'column', padding:'8px', marginLeft: '16px', marginTop : '8px',textAlign:'left', alignItems:'start'}}>
   
-        <Typography variant="body1" sx={{marginLeft : 0}} >Device : {device} {model}</Typography>
-        <Typography variant="h5" sx={{marginLeft : 0}} >Selected Issues:</Typography>
+        <Typography variant="body1" sx={{marginLeft : 0}} > <strong> Device : </strong> {device} {model}</Typography>
+        <Typography variant="body1" sx={{marginLeft : 0}} > <strong>Selected Issues:  </strong></Typography>
         {
           issues1.map((iss) => (
             <Box sx={{display:'flex', justifyContent:'space-between', flexDirection:'row', width:'80%'}}>
@@ -133,9 +133,12 @@ export default function PriceSummary1({handlenextpage, delivery}){
         </Box>
 	
       <Divider sx={{width:'80%', m:2,}}/>
-      <Button type="submit" color="primary" onClick={handlenextpage} disabled={!isChecked} >
+	  <Box sx={{display:'flex',justifyContent:'center', flexDirection:'row', width:'80%', alignItems:'center', paddingLeft : '0px'}}>
+		<Button onClick={handlenextpage} disabled={!isChecked} >
         Book Service
       </Button>
+	  </Box>
+      
         </Grid>
     )
 }
