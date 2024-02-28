@@ -1,7 +1,7 @@
 {
   "name": "gadsetfront",
   "version": "0.1.0",
-  "homepage": "http://tamboola.in/",
+  "homepage": "",
   "private": true,
   "dependencies": {
     "@capacitor/android": "4.7.3",
@@ -31,6 +31,7 @@
     "react-bootstrap": "^2.7.2",
     "react-cookie": "^6.1.1",
     "react-dom": "^18.2.0",
+    "react-ga": "^3.3.1",
     "react-geocode": "^0.2.3",
     "react-google-maps": "^9.4.5",
     "react-icons": "^4.11.0",

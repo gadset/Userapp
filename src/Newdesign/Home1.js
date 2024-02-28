@@ -8,9 +8,10 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Button,
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import SearchComponent from "./Searchcomponent";
+import SearchComponent from "./Misc/Searchcomponent";
 import apple from "../logos/apple.svg";
 import mi from "../logos/mi.svg";
 import motorola from "../logos/motorola.svg";
@@ -21,19 +22,22 @@ import poco from "../logos/poco.svg";
 import realme from "../logos/realme.svg";
 import samsung from "../logos/samsung.svg";
 import vivo from "../logos/vivo.svg";
-import mobile from './Newlogos/phone.svg';
-import laptop from './Newlogos/laptop.svg';
-import smartwatch from './Newlogos/smartwatch.svg';
-import Tablet from './Newlogos/tablet.svg';
+import mobile from "./Newlogos/phone.svg";
+import laptop from "./Newlogos/laptop.svg";
+import smartwatch from "./Newlogos/smartwatch.svg";
+import Tablet from "./Newlogos/tablet.svg";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
-import search from './Newlogos/search.svg';
-import banner from './Newlogos/gadset_banner.png';
-import circle from './Newlogos/circle.svg';
-import {regSw, subscribe} from '../helper';
-import { useCookies } from 'react-cookie';
+import search from "./Newlogos/search.svg";
+import banner from "./Newlogos/gadset_banner.png";
+import circle from "./Newlogos/circle.svg";
+import { regSw, subscribe } from "../helper";
+import { useCookies } from "react-cookie";
 import axios from "axios";
-
+import { toast } from "react-toastify";
+import FAQs from "./TermsPolicies/FAQs";
+import FeaturesList from "./TermsPolicies/WhyUs";
+import InfiniteScrollComponent from "./Home/slidingComponent";
 
 const useStyles = makeStyles({
   card1: {
@@ -62,22 +66,22 @@ const useStyles = makeStyles({
   },
 
   scrollBox: {
-    display: 'flex',
-    whiteSpace: 'nowrap',
-    flexWrap : 'nowrap',
-    flexShrink : '0',
-    animation: '$scroll 10s linear infinite', 
-    minWidth: '100%',
+    display: "flex",
+    whiteSpace: "nowrap",
+    flexWrap: "nowrap",
+    flexShrink: "0",
+    animation: "$scroll 10s linear infinite",
+    minWidth: "100%",
     "&:hover": {
-      animationPlayState: 'paused'
-    }
-  },
-  '@keyframes scroll': {
-    '0%': {
-      transform: 'translateX(0%)',
+      animationPlayState: "paused",
     },
-    '100%': {
-      transform: 'translateX(-171%)', // Adjust the percentage (-100%) to control the scroll distance
+  },
+  "@keyframes scroll": {
+    "0%": {
+      transform: "translateX(0%)",
+    },
+    "100%": {
+      transform: "translateX(-171%)", // Adjust the percentage (-100%) to control the scroll distance
     },
   },
 });
@@ -87,36 +91,35 @@ const Home1 = () => {
   const classes = useStyles();
   const history = useHistory();
   const [data, setdata] = useState([]);
-  const [cookies] = useCookies(['access_token']);
-  
-  useEffect(() => {
-    const GetData = async() => {
-      const res = await axios.get('http://localhost:8003/users/bidstodisplay')
-      const data = res.data.data;
-      console.log(data);
-      console.log(res.data);
-      setdata(data);
+  const [cookies] = useCookies(["access_token"]);
 
-      const resi = await axios.get('http://localhost:8003/users/u', {
-        headers: {
-          'x-token': cookies.access_token
-        }
-      })
-      // console.log(resi.data.user);
-      localStorage.setItem('User',resi.data.user );
-    }
+  useEffect(() => {
+    const GetData = async () => {
+      try {
+        const res = await axios.get(
+          process.env.REACT_APP_BACKEND + "users/bidstodisplay"
+        );
+        const data = res.data.data;
+        console.log(data);
+        console.log(res.data);
+        setdata(data);
+      } catch (error) {
+        console.log(error.response); // this is the main part. Use the response property from the error object
+        toast.error("Error in retrieving data");
+      }
+    };
     GetData();
-  }, [10000])
+  }, []);
 
   const bidscompleted = [
     { name: "iphone-13", amount: "4500" },
     { name: "iphone-13", amount: "100" },
-    {name : "iphone-13", amount : '340'},
-    {name : "iphone-13", amount : '901'},
+    { name: "iphone-13", amount: "340" },
+    { name: "iphone-13", amount: "901" },
     { name: "iphone-13", amount: "4500" },
     { name: "iphone-13", amount: "100" },
-    {name : "iphone-13", amount : '340'},
-    {name : "iphone-13", amount : '901'},
+    { name: "iphone-13", amount: "340" },
+    { name: "iphone-13", amount: "901" },
   ];
 
   const data1 = [
@@ -139,50 +142,79 @@ const Home1 = () => {
     { name: "Tablet", img: Tablet },
   ];
 
-
   const handlenextpage = (devi) => {
     console.log("hello");
-    history.push({pathname : "/select",
-  state : {device : devi }});
+    history.push({ pathname: "/select", state: { device: devi } });
   };
 
   return (
-    <Grid sx={{display:'flex', justifyContent:'center', flexDirection:'column', alignItems:'center', marginBottom:'50px', marginTop:'5px'}}>
-      <img src={banner} alt="gadset_banner" style={{width:'95%'}}/>
-      <Grid item sx={{width:'95%',  overflowX:'hidden',}}>
-        <Typography variant="h4">Recent Bids</Typography>
-        <Box
-          className={classes.scrollBox}
-        >
-          {data.map((bid, index) => (
-            <Box key={index} sx={{display:'flex', flexDirection:'row', justifyContent:'center',   borderTop: '1px solid #333',
-                        borderBottom: '1px solid #333',
-                        background: '#F9F9F9',}}    >
-              <img src={circle} alt='circle dot' style={{marginLeft: '5px', padding: '0 0 0 5px'}}></img>
-              <Box sx={{display:'flex', flexDirection:'column', marginLeft:theme.spacing(1),alignItems:'start'}}>
-                <Typography variant="body1">{bid.device} {bid.model}</Typography>
-                {
-                  bid.issu.map((issue) => (
-                    <Typography variant="body1">{issue}</Typography>
-                  ))
-                }
+    <Grid
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+        marginBottom: "50px",
+        marginTop: "5px",
+      }}
+    >
+      <img src={banner} alt="gadset_banner" style={{ width: "95%" }} />
+      <Grid item sx={{ width: "95%", overflowX: "hidden" }}>
+        <Typography variant="h4">Issues We Solve</Typography>
+		<InfiniteScrollComponent/>
+        {/* <Box className={classes.scrollBox}>
+          {
+			data?.length > 0 ? 
+		  data?.map((bid, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                borderTop: "1px solid #333",
+                borderBottom: "1px solid #333",
+                background: "#F9F9F9",
+              }}
+            >
+              <img
+                src={circle}
+                alt="circle dot"
+                style={{ marginLeft: "5px", padding: "0 0 0 5px" }}
+              ></img>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginLeft: theme.spacing(1),
+                  alignItems: "start",
+                }}
+              >
+                <Typography variant="body1">
+                  {bid.device} {bid.model}
+                </Typography>
+                {bid.issu.map((issue) => (
+                  <Typography variant="body1">{issue}</Typography>
+                ))}
               </Box>
-            </Box>    
-          ))}
-        </Box>
+            </Box>
+          ))
+		
+		  :
+		  <Typography>No recent bids to show</Typography>
+		}
+        </Box> */}
       </Grid>
-      
-      <Typography variant="h5">
-        Select Device
-      </Typography>
+
+      <Typography variant="h5">Select Device</Typography>
       <Grid
         container
         style={{
           flexDirection: "row",
           display: "flex",
           justifyContent: "space-between",
-          flex : 'Wrap',
-          width:'86%'
+          flex: "Wrap",
+          width: "86%",
         }}
       >
         {devices.map((device) => (
@@ -190,7 +222,7 @@ const Home1 = () => {
             item
             xs={5.5}
             className={classes.modelcard}
-            onClick={() => handlenextpage(device['name'])}
+            onClick={() => handlenextpage(device["name"])}
             spacing={2}
             style={{
               border: "1px solid #EFEFEF",
@@ -198,34 +230,28 @@ const Home1 = () => {
               justifyContent: "center",
               alignItems: "center",
               padding: "8px",
-              marginTop:'8px',
-              background:' var(--light-gray, #F0F0F0)',
-              
+              marginTop: "8px",
+              background: " var(--light-gray, #F0F0F0)",
             }}
           >
             <Card
               elevation={0}
-              sx={{ background: 'var(--light-gray, #F0F0F0)'}}
-  
+              sx={{ background: "var(--light-gray, #F0F0F0)" }}
             >
               <CardMedia
                 image={device["img"]}
                 title={device["name"]}
                 sx={{ height: "72px", width: "72px" }}
               />
-              <Typography
-                variant="body2"
-                sx={{fontWeight: '600'}}
-              >
+              <Typography variant="body2" sx={{ fontWeight: "600" }}>
                 {device["name"]}
               </Typography>
             </Card>
           </Grid>
         ))}
       </Grid>
-      <Grid>
-
-      </Grid>
+      <FAQs/>
+	  <FeaturesList/>
     </Grid>
   );
 };

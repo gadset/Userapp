@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux"
 import { setImageValue } from "./reduxstore";
 import axios from "axios";
 
-const convertedVapidKey = urlBase64ToUint8Array("BMQOKdrpuYRNgI3wXtDoQstTJEt1rnO9w6b9KM3MnJek8V4DH72OYNYoACbpveEVg_1snYmI8EZIdJV_5qjfMo4")
+const convertedVapidKey = urlBase64ToUint8Array("BJs-1rAgTehzrIsAOwkqNHiwhTNB2Iudrw5XRzAen9wFcpcvICqVzpxwA7vwdyT1grGNOaKW9kdconwzjnHWWIg")
 
 const user = localStorage.getItem('User');
 
@@ -22,14 +22,21 @@ function urlBase64ToUint8Array(base64String) {
 
 async function sendSubscription(subscription) {
   console.log(subscription);
-  return await axios.post(`${process.env.REACT_APP_BACKEND}message/subscribe`, {subscription, user},{
+  try{
+	return fetch(process.env.REACT_APP_BACKEND + `message/subscribeuser`, {
+    method: 'POST',
+    body: JSON.stringify(subscription),
     headers: {
       'Content-Type': 'application/json'
     }
   })
+  }
+  catch(error) {
+	console.log(error);
+  }
 }
 
-export function SubscribeUser() {
+export function SubscribeUser({partnerid}) {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(function(registration) {
       if (!registration.pushManager) {
@@ -38,7 +45,7 @@ export function SubscribeUser() {
       }
 
       registration.pushManager.getSubscription().then(function(existedSubscription) {
-        if (existedSubscription === null) {
+        // if (existedSubscription === null) {
           console.log('No subscription detected, make a request.')
           registration.pushManager.subscribe({
             applicationServerKey: convertedVapidKey,
@@ -46,7 +53,11 @@ export function SubscribeUser() {
           }).then(function(newSubscription) {
             localStorage.setItem("subscription" , JSON.stringify(newSubscription));
             console.log('New subscription added.')
-            sendSubscription(newSubscription)
+			const obj = {
+				subscription : newSubscription,
+                user : partnerid
+			}
+            sendSubscription(obj)
           }).catch(function(e) {
             if (Notification.permission !== 'granted') {
               console.log('Permission was not granted.')
@@ -54,11 +65,15 @@ export function SubscribeUser() {
               console.error('An error ocurred during the subscription process.', e)
             }
           })
-        } else {
-          console.log('Existed subscription detected.');
-          localStorage.setItem("subscription" , JSON.stringify(existedSubscription));
-          sendSubscription(existedSubscription)
-        }
+        // } else {
+        //   console.log('Existed subscription detected.');
+        //   localStorage.setItem("subscription" , JSON.stringify(existedSubscription));
+        //   const obj = {
+		// 		subscription : existedSubscription,
+        //         user : partnerid
+		// 	}
+        //     sendSubscription(obj)
+        // }
       })
     })
       .catch(function(e) {

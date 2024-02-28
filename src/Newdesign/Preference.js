@@ -1,9 +1,9 @@
-import { Typography, Box, Grid, Button, FilledInput } from '@mui/material';
+import { Typography, Box, Grid, Button, FilledInput, TextField } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import React , {useState} from 'react';
+import React , {useState, useEffect} from 'react';
 import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,10 @@ import { ColorRing } from 'react-loader-spinner';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { ToastContainer, toast } from 'react-toastify';
+import { storage } from "../firebase.config";
+import { ref, uploadBytesResumable, getDownloadURL , uploadBytes} from "firebase/storage";
+import sendWhatsappMsg from './SendMessage/sendwhatsapp';
+import ReactGA from 'react-ga';
 
 const Preference = () => {
   const location = useLocation();
@@ -19,12 +23,14 @@ const Preference = () => {
     const [value, setValue] = useState('Service center');
     const [value2, setValue2] = useState('With warranty');
     const [value3, setValue3] = useState('Normal');
-    // const model = useSelector((state)=>state.model.value);
-    // const device = useSelector((state)=>state.device.value);
-    const model = localStorage.getItem('model');
-    const device = localStorage.getItem('device');
+	const [description, setDescription] = useState('');
+	const [file, setFile] = useState(null);
+    const model = useSelector((state)=>state.model.value);
+    const device = useSelector((state)=>state.device.value);
+    // const model = localStorage.getItem('model');
+    // const device = localStorage.getItem('device');
 
-    const userid = useSelector((state)=>state.userid.value)
+    const userid = useSelector((state)=>state.userid.value) || localStorage.getItem('userid');
     const history = useHistory();
     const issuearray = location.state.issues;
     const [loading, setloading] = useState(false);
@@ -46,38 +52,102 @@ const Preference = () => {
         console.log(e.target.value)
       }
 
-      const handlesendquote = async() => {
-        setloading(true);
-        const auth= getAuth();
-        const user = auth.currentUser;
-        var uid;
-        if(user){
-          uid = user.uid;
-        }
+	    useEffect(() => {
+    // Initialize Google Analytics with your tracking ID
+    ReactGA.initialize('G-RM48RFTVRV');
+  }, []);
 
-        const res = await axios.post('http://localhost:8003/users/sendquote', {
+	  const handleChangeImage = (filevalue) => 
+	  {
+		console.log("filevalue", filevalue);
+
+	 	const metadata = {
+  			contentType: 'image'
+		};
+	
+		setloading(true);
+
+// Upload file and metadata to the object 'images/mountains.jpg'
+const storageRef = ref(storage, 'images/' + `${model}_${device}_${userid}_${filevalue?.name}`);
+uploadBytes(storageRef, filevalue).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+       setFile(url);
+	   setloading(false);
+      });
+    });
+// const uploadTask = uploadBytesResumable(storageRef, filevalue);
+
+ 
+//         uploadTask.on(
+//             "state_changed",
+//             (snapshot) => {
+//                 const percent = Math.round(
+//                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+//                 );  },
+//             (err) => {
+// 				console.log(err);},
+//             () => {
+//                 // download url
+//                 getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+// 					 setFile(url);
+//                 });
+//             }
+//         );
+
+	  }
+
+      const handlesendquote = async() => {
+        // setloading(true);
+		ReactGA.event({
+      category: 'Button',
+      action: 'Click',
+      label: 'Lead Created',
+    });
+
+// Upload file and metadata to the object 'images/mountains.jpg'
+// Listen for state changes, errors, and completion of the upload.
+		
+// var imagefile = "";
+		try{
+		const res = await axios.post(process.env.REACT_APP_BACKEND + 'users/sendquote', {
             "device" :device,
             "model" : model,
             "issue" : issuearray,
             "quality" : value3,
             "warranty" : value2,
             "service": value,
+			"description" : description,
+			"imagefile" : file
         }, {
           headers: {
-            'x-token': cookies.access_token
+            // 'x-token': cookies.access_token
+			'x-token' : localStorage.getItem('access_token'),
           }
         })
-
-        const data = res.data;
-        console.log(data)
+		const data = res.data;
+        console.log("this is response data", data)
+		localStorage.setItem('quoteid', data.id);
+		data?.partnernumber.forEach((partner) => {
+		sendWhatsappMsg({
+			templateParams : [`${device}`, `${model}`],
+			destination : `+91${partner}`,
+			campaignName : 'Customer Quote Add - Partner Notification'
+		})
+		})
+		history.push({pathname : "/getquotes",});
+		}
+       catch(error){
+		setloading(false);
+		console.log(error)
+		toast.error("Error in raising a quote");
+	   }
         // setloading(false);
-        // toast.success(data.message)
-        history.push({pathname : "/orders"})
+        // toast.success(data.message) ;
       }
 
 
     return(
-        <Box sx={{display :'flex', justifyContent:'center', flexDirection:'column', alignItems:'center', marginTop:theme.spacing(1)}}>
+        <Box sx={{display :'flex', justifyContent:'center', flexDirection:'column', alignItems:'center', marginTop:theme.spacing(1), marginBottom : '70px'}}>
             <Typography variant='h4'>Select Preference</Typography>
             <Grid container spacing={2} sx={{display:'flex', flexDirection:'column', textAlign:'left', width:'95%'}}>
             <Grid item >
@@ -122,9 +192,30 @@ const Preference = () => {
     </FormControl>
     </Grid>
 
-  <Button sx={{ marginTop:theme.spacing(1), width:'160px', margin:'auto'}} disabled={loading} onClick={handlesendquote
-  } >Get quotes</Button>
-  <ColorRing
+	 <Grid item>
+  <Typography variant='h4'>Description</Typography>
+  
+   <TextField
+              sx={{
+                width: "100%",
+                border: "none",
+                backgroundColor: "#D9D9D9",
+                margin: "5px auto",
+				marginLeft : '5px'
+              }}
+			  type='textarea'
+              placeholder="Current Condition of your phone"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+    </Grid>
+
+	<Grid item >
+	<Typography variant='h4'>Upload Image of current Condition of your phone </Typography>
+		<input type="file" accept="image/*" style={{height : '41px', marginTop : '12px', marginLeft : '5px'}} onChange={(e)=> handleChangeImage(e.target.files[0])}/>
+
+	</Grid>
+	 <ColorRing
     visible={loading}
     height="80"
     width="80"
@@ -133,6 +224,9 @@ const Preference = () => {
     wrapperClass="blocks-wrapper"
     colors={['#000']}
   />
+  <Button sx={{ marginBottom:theme.spacing(3), width:'160px', margin:'auto'}} disabled={loading} onClick={handlesendquote
+  } >Get quotes</Button>
+
 </Grid>
         {/* <ToastContainer
             position="bottom-right"

@@ -20,14 +20,22 @@ const firebaseConfig = {
   // ...
   // The value of `databaseURL` depends on the location of the database
  // databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app/",
- apiKey: "AIzaSyBULQBdwnrNopZghLLXL1dHrPZvRDXMe68",
- authDomain: "gadset-customer.firebaseapp.com",
- databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app",
- projectId: "gadset-customer",
- storageBucket: "gadset-customer.appspot.com",
- messagingSenderId: "853423138437",
- appId: "1:853423138437:web:1a3b38fccfc2aac51aabec",
- measurementId: "G-Q2DEF24XCF"
+//  apiKey: "AIzaSyBULQBdwnrNopZghLLXL1dHrPZvRDXMe68",
+//  authDomain: "gadset-customer.firebaseapp.com",
+//  databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app",
+//  projectId: "gadset-customer",
+//  storageBucket: "gadset-customer.appspot.com",
+//  messagingSenderId: "853423138437",
+//  appId: "1:853423138437:web:1a3b38fccfc2aac51aabec",
+//  measurementId: "G-Q2DEF24XCF"
+
+  apiKey: "AIzaSyAfxmcgmSEJP7m4u0vtwYVq_9g4dgU1iWk",
+  authDomain: "gadset-6fb3d.firebaseapp.com",
+  projectId: "gadset-6fb3d",
+  storageBucket: "gadset-6fb3d.appspot.com",
+  messagingSenderId: "176728143278",
+  appId: "1:176728143278:web:abcd3fab95d04ef987443f",
+  measurementId: "G-62W1Y5314Y"
 };
 
 // Initialize Firebase
@@ -57,5 +65,3 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 serviceWorker.register();
-
-SubscribeUser()
