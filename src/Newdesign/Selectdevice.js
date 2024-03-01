@@ -85,17 +85,17 @@ const Selectdevice = () => {
     //   localStorage.setItem('model', phone);
     //   localStorage.setItem('LoginToNavbar', 1);
 
-      if ( cookies.access_token === undefined || cookies.access_token === null || cookies.access_token === '') {
-          history.push({
-			pathname : '/loginpage',
-		   state : {
-			from : 'selectDevice',
-		   }});
-      } else {
+    //   if ( cookies.access_token === undefined || cookies.access_token === null || cookies.access_token === '') {
+    //       history.push({
+	// 		pathname : '/loginpage',
+	// 	   state : {
+	// 		from : 'selectDevice',
+	// 	   }});
+    //   } else {
           history.push({
               pathname: '/issuepage',
           });
-      } 	
+    //   } 	
     }
     
     return(

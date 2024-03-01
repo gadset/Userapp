@@ -174,7 +174,7 @@ const SelectIssue = () => {
               {
                 issues1.map((issue) => (
                   <Grid item xs={5} sx={{margin:theme.spacing(1), position: 'relative'}}>
-                    <Card className={classes.cardpre} sx={{borderRadius : '0px', width:'100%', position: 'relative'}}>
+                    <Card className={classes.cardpre}  onClick={()=> handleAddIssue(issue['name'])} sx={{borderRadius : '0px', width:'100%', position: 'relative', cursor : 'pointer'}}>
                         <CardContent sx={{padding:theme.spacing(0.5)}}>
                           <CardMedia
                             sx={{height:'100px', width:'100%'}} 
@@ -191,7 +191,7 @@ const SelectIssue = () => {
                             {issue['description']}
                           </Typography>
                         </CardContent>
-                      <Button className={classes.button1} onClick={()=> handleAddIssue(issue['name'])} sx={{borderRadius:'0px', background: '#D0D0D0', position: 'absolute', bottom: '0'}}>Add</Button>
+                      <Button className={classes.button1} sx={{borderRadius:'0px', background: '#D0D0D0', position: 'absolute', bottom: '0'}}>Add</Button>
                     </Card>
                   </Grid>
                 ))

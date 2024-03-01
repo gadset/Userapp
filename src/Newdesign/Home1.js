@@ -143,8 +143,7 @@ const Home1 = () => {
   ];
 
   const handlenextpage = (devi) => {
-    console.log("hello");
-    history.push({ pathname: "/select", state: { device: devi } });
+    history.push({ pathname: "/signin", state: { device: devi } });
   };
 
   return (
@@ -159,7 +158,7 @@ const Home1 = () => {
       }}
     >
       <img src={banner} alt="gadset_banner" style={{ width: "95%" }} />
-      <Grid item sx={{ width: "95%", overflowX: "hidden" }}>
+      <Grid item sx={{ width: "95%", overflowX: "hidden" ,  marginTop: "8px",}}>
         <Typography variant="h4">Issues We Solve</Typography>
 		<InfiniteScrollComponent/>
         {/* <Box className={classes.scrollBox}>
@@ -206,7 +205,7 @@ const Home1 = () => {
         </Box> */}
       </Grid>
 
-      <Typography variant="h5">Select Device</Typography>
+      <Typography variant="h5" sx={{ marginTop: "8px",}}>Select Device</Typography>
       <Grid
         container
         style={{
