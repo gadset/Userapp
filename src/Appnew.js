@@ -57,6 +57,7 @@ import UpdateAddress from "./Newdesign/Navbar/UpdateDetails";
   import ReactGA from 'react-ga';
 import FeaturesList from "./Newdesign/TermsPolicies/WhyUs";
 import ThankYouPage from "./Newdesign/Stepper/ThankYou";
+import LoginNew from "./Newdesign/Login/LoginNew";
   const TRACKING_ID = "G-RM48RFTVRV"; // OUR_TRACKING_ID
   ReactGA.initialize(TRACKING_ID);
 
@@ -127,11 +128,14 @@ export default function App() {
 		  <Route exact path="/">
               <Home1/>
           </Route>
-          <Route path="/select">
+          {/* <Route path="/select">
             <Selectdevice/>
-          </Route>
+          </Route> */}
 		  <Route exact path='/loginpage'>
             <Login />
+          </Route>
+		  <Route exact path='/signin'>
+            <LoginNew />
           </Route>
 		  <Route exact path='/privacy'>
             <PrivacyPolicy />
@@ -143,7 +147,7 @@ export default function App() {
 		  <Route path="/whyus"><FeaturesList/></Route>
 		  <Route path='/thankyou'><ThankYouPage/></Route>
 
-		  <Redirect to ='/loginpage'/>
+		  <Redirect to ='/signin'/>
         </Switch>
         </Grid>
         <div style={{position: 'fixed', bottom: 0 ,width:'100%', left:0, right : 0}}>
@@ -175,6 +179,10 @@ export default function App() {
 
 		  <Route exact path='/loginpage'>
             <Login />
+          </Route>
+
+		  <Route exact path='/signin'>
+            <LoginNew />
           </Route>
 
 		  <Route path="/issuepage">

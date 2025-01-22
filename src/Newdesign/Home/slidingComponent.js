@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from "@mui/styles";
 import { Card, CardMedia, Grid, Typography } from '@mui/material';
 import IssuesWeSolve from './IssuesWeSolve';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 
 const useStyles = makeStyles(theme => ({
  root: {
@@ -27,6 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     maxWidth: 345,
+	cursor : 'pointer',
     marginRight: theme.spacing(2),
   },
   media: {
@@ -38,6 +40,7 @@ const useStyles = makeStyles(theme => ({
 const InfiniteScrollComponent = () => {
   const classes = useStyles();
   const [visibleImages, setVisibleImages] = useState([]);
+  const history = useHistory();
 
   // Function to get a new set of visible images
   const getVisibleImages = () => {
@@ -73,10 +76,12 @@ const InfiniteScrollComponent = () => {
     };
   }, []);
 
+
+
   return (
     <div className={classes.root}>
         {visibleImages.map((issue, index) => (
-          <div className={classes.card} key={index}>
+          <div className={classes.card} key={index} onClick={()=> history.push('/select')}>
           <img
             className={classes.media}
             src={issue.img}
